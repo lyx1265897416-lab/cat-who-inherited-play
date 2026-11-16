@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>The Cat Who Inherited Everything · 继承一切的猫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* 布局、字幕、选项、动作圈、面板、开始/结束页与《日落岛》播放器保持一致 */
+:root{--gold:#f1d6a6;--rose:#e8b46a;--amber:#E2B15B;--amber2:#C0812F;--ink:#fbf6ee;--mute:#cfc6bb;--glass:#ffffff1f;--line:#ffffff33}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:#000;display:flex;align-items:center;justify-content:center;color:var(--ink);font:15px/1.45 Manrope,-apple-system,"PingFang SC",sans-serif;overflow:hidden;user-select:none}
+#frame{position:relative;flex:none;width:min(100vw,calc(100vh*9/16));aspect-ratio:9/16;overflow:hidden;overflow:clip;background:#000}
+video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .15s}
+video.on{opacity:1}
+/* top bar */
+#top{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;right:12px;display:flex;gap:8px;align-items:center;z-index:20}
+.pill{box-sizing:border-box;height:40px;min-width:40px;padding:0 14px;border-radius:20px;border:1px solid var(--line);background:#0000004d;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink);font:600 13px/1 Manrope,"PingFang SC",sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin:0;flex:none}
+.pill.ic{width:40px;padding:0}.pill svg{display:block;width:18px;height:18px;flex:none}
+.pill.off{opacity:.45}
+#top .sp{flex:1}
+/* captions */
+#cap{position:absolute;left:7%;right:7%;bottom:calc(64px + 4%);text-align:center;pointer-events:none;z-index:6;text-shadow:0 1px 2px #000c,0 0 14px #0009}
+#cap .who{font-size:10.5px;letter-spacing:.18em;color:var(--gold);font-weight:700;margin-bottom:1px}
+#cap .en{font-size:17px;font-weight:600}
+#cap .zh{font-size:14.5px;opacity:.92;margin-top:2px}
+/* title cards */
+#card{position:absolute;left:0;right:0;top:30%;text-align:center;z-index:5;pointer-events:none;opacity:0;transition:opacity .6s}
+#card.on{opacity:1}
+#card .k{letter-spacing:.32em;font-size:11px;color:var(--ink);opacity:.9}
+#card .t{font-family:"Cormorant Garamond",serif;font-size:34px;line-height:1.05;margin-top:4px;text-shadow:0 2px 14px #0008}
+/* meet / notice toast */
+#meet{position:absolute;top:56px;left:50%;transform:translate(-50%,-10px);opacity:0;transition:all .4s;z-index:21;display:flex;gap:10px;align-items:center;padding:6px 14px 6px 6px;border-radius:999px;background:#140f12cc;border:1px solid var(--line);backdrop-filter:blur(10px);max-width:88%}
+#meet.on{opacity:1;transform:translate(-50%,0)}
+#meet.noimg{padding:8px 16px}
+#meet img{width:34px;height:34px;border-radius:50%;object-fit:cover}
+#meet.noimg img{display:none}
+#meet small{display:block;color:var(--gold);letter-spacing:.14em;font-size:10px}
+/* scrim + choice */
+#scrim{position:absolute;inset:0;background:linear-gradient(transparent 38%,#000c 82%);opacity:0;transition:opacity .35s;pointer-events:none;z-index:7}
+#scrim.on{opacity:1}#scrim.full{background:#000b}
+#choice{position:absolute;left:0;right:0;bottom:0;padding:0 16px calc(24px + env(safe-area-inset-bottom));z-index:8;transform:scale(.97);transform-origin:50% 100%;opacity:0;visibility:hidden;pointer-events:none;transition:all .35s}
+#choice.on{transform:none;opacity:1;visibility:visible;pointer-events:auto}
+#choice .q{text-align:center;margin-bottom:12px}
+#choice .q small{display:block;letter-spacing:.24em;font-size:11px;color:var(--gold);margin-bottom:6px}
+#choice .q b{font-size:21px;font-weight:600;line-height:1.25}
+.opt{display:flex;align-items:center;gap:8px;width:100%;margin:9px 0;padding:14px 18px;border-radius:16px;border:1px solid var(--line);background:#ffffff1c;backdrop-filter:blur(12px);color:var(--ink);font:600 15px Manrope,"PingFang SC";text-align:left;cursor:pointer}
+.opt:active{background:var(--gold);color:#2a1f17}
+.opt .pr{margin-left:auto;flex:none;font-size:10px;letter-spacing:.12em;padding:3px 8px;border-radius:999px;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#2a1a10}
+/* QTE action ring */
+#qte{position:absolute;left:0;right:0;bottom:calc(9% + env(safe-area-inset-bottom));z-index:9;display:flex;flex-direction:column;align-items:center;opacity:0;visibility:hidden;transform:scale(.96);pointer-events:none;transition:all .35s}
+#qte.on{opacity:1;visibility:visible;transform:none;pointer-events:auto}
+#qte small{letter-spacing:.24em;font-size:11px;color:var(--gold);margin-bottom:12px;text-transform:uppercase}
+#ring{position:relative;width:116px;height:116px;border-radius:50%;border:3px solid #ffffffb0;background:#00000040;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;font-size:44px;cursor:pointer;touch-action:none;transition:transform .15s;box-shadow:0 0 0 0 #fff6;animation:pulse 1.8s infinite}
+#ring:active{transform:scale(.94)}
+#ring.danger{border-color:#ff6b6b;background:#ff4a4a40;animation:pulseR 1.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #ffffff55}100%{box-shadow:0 0 0 22px #ffffff00}}
+@keyframes pulseR{0%{box-shadow:0 0 0 0 #ff6b6b77}100%{box-shadow:0 0 0 22px #ff6b6b00}}
+#ring svg{position:absolute;inset:-9px;width:calc(100% + 18px);height:calc(100% + 18px);transform:rotate(-90deg);pointer-events:none}
+.pips{display:flex;gap:8px;margin-top:12px}.pips i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--gold)}.pips i.f{background:var(--gold)}
+#qte b{font-size:20px;margin-top:6px}#qte span{font-size:13px;color:var(--mute)}
+/* petting hearts */
+#hearts{position:absolute;inset:0;z-index:9;display:none}
+#hearts.on{display:block}
+#hearts .hd{position:absolute;left:0;right:0;top:calc(66px + env(safe-area-inset-top));text-align:center;text-shadow:0 1px 2px #000c,0 0 14px #0009}
+#hearts .hd small{display:block;letter-spacing:.24em;font-size:11px;color:var(--gold);margin-bottom:4px}
+#hearts .hd b{font-size:20px}
+#hearts .tm{width:46%;height:3px;margin:10px auto 0;border-radius:3px;background:#ffffff38;overflow:hidden}#hearts .tm i{display:block;height:100%;width:100%;background:var(--rose)}
+.heart{position:absolute;width:64px;height:64px;margin:-32px;border:0;background:none;padding:0;font-size:44px;line-height:64px;color:var(--rose);cursor:pointer;filter:drop-shadow(0 2px 8px #0008);animation:pop .35s cubic-bezier(.3,1.6,.5,1),bob 2.2s ease-in-out .35s infinite}
+.heart.got{animation:burst .45s ease forwards}
+@keyframes pop{from{transform:scale(0)}}@keyframes bob{50%{transform:translateY(-7px)}}@keyframes burst{to{transform:scale(1.9);opacity:0}}
+/* panels */
+.sheet{position:absolute;inset:0;background:linear-gradient(#1d1519,#120e10);z-index:30;transform:translateX(100%);transition:transform .3s;overflow:auto;padding:calc(12px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
+.sheet.on{transform:none}
+.sheet .hd{display:flex;align-items:center;gap:12px;margin-bottom:16px;min-height:40px}
+.sheet .hd small{display:block;letter-spacing:.2em;font-size:10.5px;color:var(--gold)}
+.sheet .hd h2{margin:0;font-family:"Cormorant Garamond",serif;font-weight:400;font-size:36px}
+.tabs{display:flex;gap:8px;margin:6px 0 12px}.tabs button{flex:1;height:36px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);font:600 13px Manrope}
+.tabs button.on{background:#ffffff26;border-color:var(--rose)}
+.row{display:flex;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid #ffffff14}
+.row img,.row .ph{width:58px;height:58px;border-radius:12px;object-fit:cover;background:#ffffff12;display:flex;align-items:center;justify-content:center}
+.row .nm{font-family:"Cormorant Garamond",serif;font-size:22px;line-height:1}
+.row .sub{font-size:12px;color:var(--mute)}
+.hearts{color:var(--rose);font-size:13px;letter-spacing:2px}
+.ep{display:flex;gap:12px;align-items:center;padding:14px 4px;border-bottom:1px solid #ffffff14;cursor:pointer}.ep b{font-family:"Cormorant Garamond",serif;font-size:30px;width:34px;text-align:center;color:var(--gold);font-weight:400}.ep .nm{font-size:16px;font-weight:600}.ep .sub{font-size:12px;color:var(--mute)}.ep.cur{background:#ffffff10;border-radius:12px}
+.ward{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ward div{border-radius:14px;overflow:hidden;position:relative;aspect-ratio:3/5;background:#ffffff10}
+.ward img{width:100%;height:100%;object-fit:cover}.ward .lk img{filter:blur(8px) brightness(.5)}.ward span{position:absolute;left:8px;bottom:8px;font-size:12px;color:#fff;padding:4px 9px;border-radius:999px;background:#000000a0;backdrop-filter:blur(6px)}
+/* start / end */
+.screen{position:absolute;inset:0;z-index:25;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:0 24px calc(40px + env(safe-area-inset-bottom));background-size:cover;background-position:center}
+.screen::before{content:"";position:absolute;inset:0;background:linear-gradient(#0000 30%,#000d 85%)}
+.screen>*{position:relative}
+.screen h1{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:46px;line-height:.95;margin:6px 0 4px}
+.k2{letter-spacing:.28em;font-size:11px;color:var(--gold)}
+.go{margin-top:20px;padding:13px 34px;border-radius:999px;border:0;box-shadow:0 6px 20px #c0812f55;background:linear-gradient(135deg,var(--amber),var(--amber2));color:#2a1a10;font:700 16px Manrope;cursor:pointer}
+.ghost{cursor:pointer;margin-top:12px;padding:12px 26px;min-height:44px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);font:600 14px Manrope}
+.note{color:var(--mute);font-size:14px;line-height:1.55;max-width:320px;margin:8px auto 4px}
+.stats{width:100%;max-width:320px;margin:10px auto 0;text-align:left}
+#rtPaused{display:none!important}
+#rtBar{z-index:10}
+#loading{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px;border-radius:50%;border:3px solid #fff3;border-top-color:#fff;animation:spin 1s linear infinite;display:none;z-index:3}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="frame">
+  <video id="va" playsinline preload="auto"></video><video id="vb" playsinline preload="auto"></video>
+  <div id="loading"></div>
+  <div id="card"><div class="k"></div><div class="t"></div></div>
+  <div id="cap"></div>
+  <div id="scrim"></div>
+  <div id="choice"><div class="q"></div><div class="opts"></div></div>
+  <div id="qte"><small></small><div id="ring"></div><div class="pips" style="display:none"><i></i><i></i><i></i></div><b></b><span></span></div>
+  <div id="hearts"><div class="hd"><small></small><b></b><div class="tm"><i></i></div></div></div>
+  <div id="meet"><img alt=""><div><small></small><div class="nm"></div></div></div>
+  <div id="top">
+    <button class="pill ic" id="bcc" aria-label="Captions">CC</button>
+    <span class="sp"></span>
+    <button class="pill" id="baff"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 7.9 3.6 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.4 0 5.6 3.4 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg><span id="afflbl">Affection</span></button>
+    <button class="pill ic" id="bmenu" aria-label="Episodes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button>
+  </div>
+  <div class="sheet" id="menu">
+    <div class="hd"><button class="pill ic" id="menuback" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div><small id="menuk">EPISODES</small><h2 id="menut">Episodes</h2></div></div>
+    <div id="eplist"></div>
+  </div>
+  <div class="sheet" id="aff">
+    <div class="hd"><button class="pill ic" id="affback" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div><small id="affk">EVERY CHOICE COUNTS</small><h2 id="afft">Affection</h2></div></div>
+    <div class="tabs"><button class="on" data-t="h" id="th">Hearts</button><button data-t="w" id="tw">Wardrobe</button></div>
+    <div id="affbody"></div>
+  </div>
+  <div class="screen" id="start">
+    <div class="k2" id="k0">AN INTERACTIVE COZY MYSTERY</div><h1 style="font-size:36px;line-height:1">The Cat Who<br>Inherited Everything</h1><div id="sub"></div>
+    <button class="go" id="go">▶ Play</button><div style="font-size:12px;color:var(--mute);margin-top:10px" id="hint0"></div>
+  </div>
+  <div class="screen" id="endc" style="display:none;background:radial-gradient(circle at 50% 30%,#3a2a22,#0d0f11 70%);justify-content:center">
+    <div class="k2" id="endk"></div><h1 id="endt" style="font-size:38px"></h1><div class="note" id="ends"></div><div class="stats" id="endstats"></div><button class="go" id="endgo"></button><button class="ghost" id="endagain"></button>
+  </div>
+</div>
+<script src="rt-player.js"></script>
+<script>
+const Q = new URLSearchParams(location.search);
+let LANG = Q.get('lang') || ((navigator.language||'').toLowerCase().startsWith('zh') ? 'zh' : 'en');
+const $ = s => document.querySelector(s);
+const T = {en:{play:'▶ Play',hint:'Sound on · tap the picture to pause',aff:'Affection',affk:'EVERY CHOICE COUNTS',hearts:'Hearts',ward:'Wardrobe',notmet:'Not met yet',locked:'Locked',meetu:'Meet in the story to unlock',you:'Your story',met:'YOU MET',ep:n=>`EPISODE ${n}`,epdone:n=>`EPISODE ${n} COMPLETE`,again:'↺ Replay from the start',eps:'Episodes',epsk:'CHOOSE AN EPISODE',now:'Now playing',next:'Next episode ▶',worn:'Worn',lockw:'Not unlocked',choice:'YOUR CHOICE',special:'SPECIAL',purr:'He is purring',miss:'Not rendered yet — skip ▶',cont:'Continue ▶'},
+           zh:{play:'▶ 开始',hint:'请打开声音 · 点画面暂停',aff:'好感',affk:'每个选择都算数',hearts:'心动',ward:'衣橱',notmet:'还没遇见',locked:'未解锁',meetu:'在剧情中遇见后解锁',you:'你的故事',met:'遇见了',ep:n=>`第 ${n} 集`,epdone:n=>`第 ${n} 集 完`,again:'↺ 从头再来',eps:'选集',epsk:'选择一集',now:'正在播放',next:'下一集 ▶',worn:'已穿',lockw:'未解锁',choice:'你的选择',special:'特别剧情',purr:'他在呼噜呼噜',miss:'这一段还没生成 · 跳过 ▶',cont:'继续 ▶'}};
+const t = k => T[LANG][k];
+const LOOKS = ['D1','NIGHT','D2'], LOOKNAME = {D1:['Dress','刺绣长裙'],NIGHT:['Pajamas','条纹睡衣'],D2:['Cardigan','麻花开衫']};
+const STATNAME = {earl:["Earl Grey's Affection",'伯爵好感'],family:['Family Trust','家族信任']};
+let S, V = {}, cur = null, va = $('#va'), vb = $('#vb'), front = va, mode = 'idle', uiUp = false, met = new Set(), worn = new Set(['D1']), look = 'D1', cc = true, qteTimer = null;
+function apply(eff, show){ for (const [k,v] of Object.entries(eff||{})) { V[k]=(V[k]||0)+v; if(show) notice('✦', `${STATNAME[k]?STATNAME[k][LANG==='zh'?1:0]:k} ${v>0?'+':''}${v}`); } }
+function idleOf(n){ return n.idle||null; }
+function media(n){ return n.media.none||Object.values(n.media)[0]; }
+function swap(src, loop){ const b = front===va?vb:va; b.src=/^https?:/.test(src)?src:'../'+src; b.loop=!!loop; b.dataset.node=loop?'':cur; b.muted=false;
+  $('#loading').style.display='block';
+  return b.play().then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); front.classList.remove('on'); front.pause(); front=b;
+    if(!loop&&window.RT) RT.begin({key:'node:'+cur, parts:[{v:b, d:b.duration}], free:true}); }); }
+function cap(){ const n=S.nodes[cur], box=$('#cap'); if(!n||mode!=='play'||!cc||uiUp||front.dataset.node!==cur){ box.innerHTML=''; return; }
+  const tt=front.currentTime, c=(n.captions||[]).find(c=>tt>=c.s-.05&&tt<=c.e+.2); if(!c){ box.innerHTML=''; return; }
+  box.innerHTML=`<div class="who">${c.who}</div><div class="en">${c.en}</div>`+(LANG==='zh'?`<div class="zh">${c.zh}</div>`:''); }
+function cards(){ const n=S.nodes[cur], el=$('#card'); if(!n||!n.cards||mode!=='play'||front.dataset.node!==cur){ el.classList.remove('on'); return; }
+  const tt=front.currentTime, c=n.cards.find(c=>tt>=c.at&&tt<=c.at+c.dur);
+  if(c){ el.querySelector('.k').textContent=LANG==='zh'?c.k_zh:c.k_en; el.querySelector('.t').textContent=LANG==='zh'?c.t_zh:c.t_en; el.classList.add('on'); } else el.classList.remove('on'); }
+let cueDone = new Set();
+function cues(){ const n=S.nodes[cur]; if(!n||!n.cues||mode!=='play'||!front.duration||front.dataset.node!==cur) return;
+  n.cues.forEach((c,i)=>{ const at=c.at<0?front.duration+c.at:c.at, key=cur+i; if(!cueDone.has(key)&&front.currentTime>=at){ cueDone.add(key); notice('✦', LANG==='zh'?c.zh:c.en); } }); }
+function tick(){ const n=S&&S.nodes[cur];
+  if(n&&mode==='play'&&front.duration&&!uiUp&&front.dataset.node===cur&&!front.loop){ const left=front.duration-front.currentTime;
+    if(n.qte&&left<=(n.qte.lead||3)) showQTE(n); else if(n.choice&&left<=(n.choice.lead||3)) showChoice(n); }
+  cap(); cards(); cues(); requestAnimationFrame(tick); }
+let noticeQ=[], noticeOn=false;
+function notice(k, text, img){ noticeQ.push([k,text,img]); if(!noticeOn) nextNotice(); }
+function nextNotice(){ const it=noticeQ.shift(); if(!it){ noticeOn=false; return; } noticeOn=true; const m=$('#meet');
+  m.classList.toggle('noimg',!it[2]); if(it[2]) m.querySelector('img').src=it[2]; m.querySelector('small').textContent=it[0]; m.querySelector('.nm').textContent=it[1];
+  m.classList.add('on'); setTimeout(()=>{ m.classList.remove('on'); setTimeout(nextNotice,420); },2600); }
+function meet(who){ if(!who||met.has(who)||!S.cast[who]) return; met.add(who); const c=S.cast[who]; notice(t('met'), LANG==='zh'?c[1]:c[0], 'img/'+who+'.jpg'); }
+let ORDER=null, MEETAT=null;
+function syncMet(id){ if(!ORDER){ ORDER={}; Object.keys(S.nodes).forEach((k,i)=>ORDER[k]=i); MEETAT={};
+    Object.entries(S.nodes).forEach(([k,n])=>[].concat(n.meet||[]).forEach(w=>{ if(MEETAT[w]==null||ORDER[k]<ORDER[MEETAT[w]]) MEETAT[w]=k; })); }
+  const here=ORDER[id]; Object.entries(MEETAT).forEach(([w,k])=>{ if(ORDER[k]<here) met.add(w); }); }
+function go(id){ const n=S.nodes[id]; if(!n) return; cur=id; uiUp=false; hideUI(); syncMet(id);
+  const ms=[].concat(n.meet||[]); if(ms.length) setTimeout(()=>{ if(cur===id) ms.forEach(w=>meet(w)); },2500);
+  if(n.look){ worn.add(n.look); look=n.look; }
+  if(n.end){ return endEp(null, id); }
+  const src=media(n); if(!src){ mode='missing'; return showMissing(n); }
+  mode='play'; swap(src,false).catch(()=>{}); }
+function after(){ const n=S.nodes[cur]; if(!n) return;
+  if(n.qte||n.choice){ const il=idleOf(n); if(il) swap(il,true).catch(()=>{}); if(!uiUp){ n.qte?showQTE(n):showChoice(n); } mode='wait'; return; }
+  if(n.next) return jump(n.next); endEp(n.ep,null); }
+function jump(id){ const a=S.nodes[cur], b=S.nodes[id]; if(b&&a&&b.ep!==a.ep) return endEp(a.ep,id); go(id); }
+function hideUI(){ $('#choice').classList.remove('on'); $('#qte').classList.remove('on'); $('#hearts').classList.remove('on'); $('#hearts').querySelectorAll('.heart').forEach(h=>h.remove());
+  $('#scrim').classList.remove('on','full'); if(qteTimer){ clearInterval(qteTimer); qteTimer=null; } }
+function showChoice(n){ uiUp=true; $('#choice').onclick=e=>e.stopPropagation(); $('#cap').innerHTML=''; const c=n.choice, box=$('#choice');
+  box.querySelector('.q').innerHTML=`<small>${LANG==='zh'?c.kicker_zh:c.kicker_en}</small><b>${LANG==='zh'?c.q_zh:c.q_en}</b>`;
+  const o=box.querySelector('.opts'); o.innerHTML='';
+  c.options.forEach(x=>{ const b=document.createElement('button'); b.className='opt'; b.innerHTML=`<span>${LANG==='zh'?x.zh:x.en}</span>`+(x.premium?`<span class="pr">✦ ${t('special')}</span>`:''); b.onclick=e=>{e.stopPropagation(); pick(n,x);}; o.appendChild(b); });
+  $('#scrim').classList.add('on'); box.classList.add('on'); }
+function pick(n,x){ apply(x.effects,true); hideUI(); jump(x.goto); }
+function showQTE(n){ uiUp=true; $('#cap').innerHTML=''; const q=n.qte, Z=LANG==='zh';
+  const box=$('#qte'), r=$('#ring'), pips=box.querySelector('.pips');
+  r.className=q.danger?'danger':''; r.innerHTML=q.icon+(q.seconds?`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="none" stroke="${q.danger?'#ff6b6b':'#ffffffb0'}" stroke-width="3" stroke-dasharray="295.3" stroke-dashoffset="0" id="rc"/></svg>`:'');
+  box.querySelector('small').textContent=Z?q.prompt_zh:q.prompt_en; box.querySelector('b').textContent=Z?q.zh:q.en; box.querySelector('span').textContent=Z?q.hint_zh:q.hint_en;
+  pips.style.display=q.kind==='pay'?'':'none'; if(q.kind==='hold') r.innerHTML=q.icon+'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="none" stroke="#E2B15B" stroke-width="4" stroke-dasharray="295.3" stroke-dashoffset="295.3" id="hc"/></svg>'+(q.seconds?'':''); pips.querySelectorAll('i').forEach(i=>i.classList.remove('f'));
+  $('#scrim').classList.add('on'); box.classList.add('on'); box.onclick=e=>e.stopPropagation();
+  let taps=0; const done=to=>{ hideUI(); r.onpointerup=null; if(!to) apply(q.ok,true); jump(to?q.timeout:q.goto); };
+  r.onpointerdown=e=>e.stopPropagation(); r.onclick=e=>e.stopPropagation();
+  if(q.kind==='hold'){ let h0=null, raf=null; const hc=$('#hc'), HOLD=1200;
+    const step=()=>{ if(h0==null) return; const p=Math.min(1,(performance.now()-h0)/HOLD); hc.style.strokeDashoffset=295.3*(1-p); if(p>=1){ h0=null; notice('✦', t('purr')); setTimeout(()=>done(false),500); return; } raf=requestAnimationFrame(step); };
+    const stop=e=>{ if(e) e.stopPropagation(); if(h0==null) return; h0=null; cancelAnimationFrame(raf); hc.style.transition='stroke-dashoffset .25s'; hc.style.strokeDashoffset=295.3; setTimeout(()=>hc.style.transition='',260); };
+    r.onpointerdown=e=>{ e.stopPropagation(); try{ r.setPointerCapture(e.pointerId); }catch(_){} h0=performance.now(); raf=requestAnimationFrame(step); };
+    r.onpointerup=stop; r.onpointercancel=stop; r.onpointerleave=stop;
+    if(q.seconds){ const t0=performance.now(), me=cur; qteTimer=setInterval(()=>{ if(cur!==me){ clearInterval(qteTimer); qteTimer=null; return; } if((performance.now()-t0)>=q.seconds*1000) done(true); },200); }
+    return; }
+  r.onpointerup=e=>{ e.stopPropagation(); if(q.kind==='pay'){ taps++; pips.querySelectorAll('i').forEach((i,k)=>i.classList.toggle('f',k<taps)); if(taps<3) return; setTimeout(()=>done(false),250); r.onpointerup=null; return; } done(false); };
+  if(q.seconds){ const t0=performance.now(), me=cur; qteTimer=setInterval(()=>{ if(cur!==me){ clearInterval(qteTimer); qteTimer=null; return; }
+    const p=Math.min(1,(performance.now()-t0)/(q.seconds*1000)), rc=$('#rc'); if(rc) rc.style.strokeDashoffset=295.3*p; if(p>=1) done(true); },100); } }
+function showHearts(n){ const q=n.qte, Z=LANG==='zh', box=$('#hearts'), N=8, T0=performance.now(), TT=(q.seconds||30)*1000, me=cur; let got=0;
+  box.querySelector('small').textContent=Z?q.prompt_zh:q.prompt_en; const lbl=()=>box.querySelector('b').textContent=`${Z?q.hint_zh:q.hint_en} · ${got}/${N}`; lbl();
+  box.classList.add('on'); box.onclick=e=>e.stopPropagation();
+  const spawn=()=>{ if(cur!==me||got>=N) return; const h=document.createElement('button'); h.className='heart'; h.textContent='♥';
+    h.style.left=(18+Math.random()*64)+'%'; h.style.top=(30+Math.random()*40)+'%';
+    h.onpointerup=e=>{ e.stopPropagation(); if(h.classList.contains('got')) return; h.classList.add('got'); got++; lbl(); setTimeout(()=>h.remove(),450);
+      if(got>=N){ notice('✦', t('purr')); setTimeout(()=>{ if(cur===me){ hideUI(); apply(q.ok,true); jump(q.goto); } },900); } else setTimeout(spawn,300); };
+    box.appendChild(h); };
+  spawn();
+  qteTimer=setInterval(()=>{ if(cur!==me||got>=N){ clearInterval(qteTimer); qteTimer=null; return; } const p=Math.min(1,(performance.now()-T0)/TT); box.querySelector('.tm i').style.width=(100-p*100)+'%';
+    if(p>=1){ hideUI(); jump(q.timeout); } },100); }
+function showMissing(n){ const b=document.createElement('button'); b.className='opt'; b.textContent=t('miss'); b.onclick=e=>{e.stopPropagation(); after();};
+  const box=$('#choice'); box.querySelector('.q').innerHTML=`<b>${LANG==='zh'?n.title_zh:n.title_en}</b>`; box.querySelector('.opts').innerHTML=''; box.querySelector('.opts').appendChild(b); $('#scrim').classList.add('on','full'); box.classList.add('on'); }
+function statRows(){ const Z=LANG==='zh'; return Object.keys(STATNAME).map(k=>`<div class="row" style="padding:8px 2px"><img src="img/${k}.jpg" style="width:40px;height:40px;border-radius:50%"><div style="flex:1;font-size:15px;font-weight:600">${STATNAME[k][Z?1:0]}</div><div class="hearts">${hearts(V[k])}</div><div style="color:var(--gold);width:30px;text-align:right">${V[k]||0}</div></div>`).join(''); }
+function endEp(ep,nextId){ mode='end'; front.pause(); hideUI(); const Z=LANG==='zh', from=S.nodes[cur], nx=nextId?S.nodes[nextId]:null;
+  const ag=$('#endagain'); ag.textContent=t('again'); ag.onclick=ev=>{ev.stopPropagation(); restart();};
+  const b=$('#endgo'); $('#endstats').innerHTML=statRows();
+  if(nx&&nx.end&&nextId===cur){ // 第 4 集：敬请期待
+    $('#endk').textContent=Z?nx.kicker_zh:nx.kicker_en; $('#endt').textContent=Z?nx.title_zh:nx.title_en; $('#ends').textContent=Z?nx.note_zh:nx.note_en;
+    b.style.display='none'; ag.style.display=''; $('#endc').style.display='flex'; return; }
+  $('#endk').textContent=t('epdone')(ep); const e=S.episodes[ep]; $('#endt').textContent=e?(Z?e.title_zh:e.title_en):'';
+  $('#ends').textContent=from&&from.summary?(Z?from.summary.note_zh:from.summary.note_en):'';
+  ag.style.display=nextId?'none':''; b.style.display=nextId?'':'none'; b.textContent=nx&&nx.end?t('cont'):t('next'); b.onclick=ev=>{ev.stopPropagation(); $('#endc').style.display='none'; go(nextId);}; $('#endc').style.display='flex'; }
+function restart(){ V=Object.assign({},S.vars); met=new Set(); worn=new Set(['D1']); look='D1'; cueDone=new Set(); ['#start','#endc'].forEach(q=>$(q).style.display='none'); $('#menu').classList.remove('on'); front.pause(); go(S.start); }
+function renderMenu(){ const Z=LANG==='zh', curEp=cur&&S.nodes[cur]?S.nodes[cur].ep:0;
+  $('#menuk').textContent=t('epsk'); $('#menut').textContent=t('eps');
+  $('#eplist').innerHTML=Object.entries(S.episodes).sort((a,b)=>a[0]-b[0]).map(([e,x])=>`<div class="ep${+e===curEp?' cur':''}" data-e="${e}"><b>${e}</b><div style="flex:1"><div class="nm">${Z?x.title_zh:x.title_en}</div><div class="sub">${t('ep')(e)}${+e===curEp?' · '+t('now'):''}</div></div><span>▶</span></div>`).join('');
+  $('#eplist').querySelectorAll('.ep').forEach(d=>d.onclick=ev=>{ ev.stopPropagation(); const e=S.episodes[d.dataset.e]; $('#menu').classList.remove('on');
+    ['#start','#endc'].forEach(q=>$(q).style.display='none'); front.pause(); go(e.start); }); }
+$('#bmenu').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); renderMenu(); $('#menu').classList.add('on');};
+$('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'); if(mode==='play') front.play();};
+[va,vb].forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
+$('#bcc').onclick=e=>{e.stopPropagation(); cc=!cc; $('#bcc').classList.toggle('off',!cc);};
+function hearts(x){ const n=Math.max(0,Math.min(5,Math.round((x||0)/3))); return '♥'.repeat(n)+'♡'.repeat(5-n); }
+function renderAff(tab){ $('#th').classList.toggle('on',tab==='h'); $('#tw').classList.toggle('on',tab==='w'); const b=$('#affbody'), Z=LANG==='zh';
+  if(tab==='h'){ b.innerHTML=Object.entries(S.cast).map(([k,c])=>met.has(k)?`<div class="row"><img src="img/${k}.jpg"><div style="flex:1"><div class="nm">${Z?c[1]:c[0]}</div><div class="sub">${Z?c[3]:c[2]} · ${STATNAME[k][Z?1:0]} ${V[k]||0}</div><div class="hearts">${hearts(V[k])}</div></div></div>`
+      :`<div class="row"><div class="ph">👤</div><div style="flex:1"><div class="nm">${t('notmet')}</div><div class="sub"><b>${t('locked')}</b> · ${t('meetu')}</div></div><span>🔒</span></div>`).join('')
+      +`<div class="row"><img src="img/${look}.jpg" style="object-position:50% 8%"><div style="flex:1"><div class="nm">Ivy Hart</div><div class="sub">${Z?'艾薇·哈特':'The caretaker'} · ${t('you')}</div></div></div>`; }
+  else b.innerHTML='<div class="ward">'+LOOKS.map(k=>`<div class="${worn.has(k)?'':'lk'}"><img src="img/${k}.jpg"><span>${worn.has(k)?t('worn')+' · '+LOOKNAME[k][Z?1:0]:'🔒 '+t('lockw')}</span></div>`).join('')+'</div>'; }
+$('#baff').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); $('#affk').textContent=t('affk'); $('#afft').textContent=t('aff'); $('#th').textContent=t('hearts'); $('#tw').textContent=t('ward'); renderAff('h'); $('#aff').classList.add('on');};
+$('#affback').onclick=e=>{e.stopPropagation(); $('#aff').classList.remove('on'); if(mode==='play') front.play();};
+$('#th').onclick=e=>{e.stopPropagation(); renderAff('h');}; $('#tw').onclick=e=>{e.stopPropagation(); renderAff('w');};
+const FR=document.querySelector('#frame'); FR.addEventListener('scroll',()=>{ if(FR.scrollTop||FR.scrollLeft){ FR.scrollTop=0; FR.scrollLeft=0; } });
+fetch('story.json?'+Date.now()).then(r=>r.json()).then(d=>{ S=d; V=Object.assign({},d.vars);
+  $('#afflbl').textContent=t('aff'); $('#go').textContent=t('play'); $('#hint0').textContent=t('hint'); $('#sub').textContent=LANG==='zh'?d.title_zh:'';
+  $('#k0').textContent=LANG==='zh'?'互动治愈悬疑剧':'AN INTERACTIVE COZY MYSTERY';
+  $('#start').style.backgroundImage="url('poster.jpg')";
+  $('#go').onclick=e=>{ e.stopPropagation(); $('#start').style.display='none'; go(Q.get('node')||d.start); };
+  RT.init({drama:'cat-who-inherited', stage:'#frame', zh:()=>LANG==='zh', isPlaying:()=>mode==='play'&&!uiUp, ignore:'#top,#qte,#choice,#ring,#hearts,.sheet,.screen,#meet,#menu'});
+  requestAnimationFrame(tick); });
+</script>
+</body>
+</html>
