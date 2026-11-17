@@ -125,7 +125,6 @@ video.on{opacity:1}
   </div>
   <div class="sheet" id="aff">
     <div class="hd"><button class="pill ic" id="affback" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><div><small id="affk">EVERY CHOICE COUNTS</small><h2 id="afft">Affection</h2></div></div>
-    <div class="tabs"><button class="on" data-t="h" id="th">Hearts</button><button data-t="w" id="tw">Wardrobe</button></div>
     <div id="affbody"></div>
   </div>
   <div class="screen" id="start">
@@ -263,14 +262,13 @@ $('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'
 POOL.forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
 $('#bcc').onclick=e=>{e.stopPropagation(); cc=!cc; $('#bcc').classList.toggle('off',!cc);};
 function hearts(x){ const n=Math.max(0,Math.min(5,Math.round((x||0)/3))); return '♥'.repeat(n)+'♡'.repeat(5-n); }
-function renderAff(tab){ $('#th').classList.toggle('on',tab==='h'); $('#tw').classList.toggle('on',tab==='w'); const b=$('#affbody'), Z=LANG==='zh';
-  if(tab==='h'){ b.innerHTML=Object.entries(S.cast).map(([k,c])=>met.has(k)?`<div class="row"><img src="img/${k}.jpg"><div style="flex:1"><div class="nm">${Z?c[1]:c[0]}</div><div class="sub">${Z?c[3]:c[2]} · ${STATNAME[k][Z?1:0]} ${V[k]||0}</div><div class="hearts">${hearts(V[k])}</div></div></div>`
+function renderAff(){ const b=$('#affbody'), Z=LANG==='zh';  // 只有好感列表（衣橱页已去掉）
+  b.innerHTML=Object.entries(S.cast).map(([k,c])=>met.has(k)?`<div class="row"><img src="img/${k}.jpg"><div style="flex:1"><div class="nm">${Z?c[1]:c[0]}</div><div class="sub">${Z?c[3]:c[2]} · ${STATNAME[k][Z?1:0]} ${V[k]||0}</div><div class="hearts">${hearts(V[k])}</div></div></div>`
       :`<div class="row"><div class="ph">👤</div><div style="flex:1"><div class="nm">${t('notmet')}</div><div class="sub"><b>${t('locked')}</b> · ${t('meetu')}</div></div><span>🔒</span></div>`).join('')
       +`<div class="row"><img src="img/${look}.jpg" style="object-position:50% 8%"><div style="flex:1"><div class="nm">Ivy Hart</div><div class="sub">${Z?'艾薇·哈特':'The caretaker'} · ${t('you')}</div></div></div>`; }
-  else b.innerHTML='<div class="ward">'+LOOKS.map(k=>`<div class="${worn.has(k)?'':'lk'}"><img src="img/${k}.jpg"><span>${worn.has(k)?t('worn')+' · '+LOOKNAME[k][Z?1:0]:'🔒 '+t('lockw')}</span></div>`).join('')+'</div>'; }
-$('#baff').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); $('#affk').textContent=t('affk'); $('#afft').textContent=t('aff'); $('#th').textContent=t('hearts'); $('#tw').textContent=t('ward'); renderAff('h'); $('#aff').classList.add('on');};
+$('#baff').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); $('#affk').textContent=t('affk'); $('#afft').textContent=t('aff'); renderAff(); $('#aff').classList.add('on');};
 $('#affback').onclick=e=>{e.stopPropagation(); $('#aff').classList.remove('on'); if(mode==='play') front.play();};
-$('#th').onclick=e=>{e.stopPropagation(); renderAff('h');}; $('#tw').onclick=e=>{e.stopPropagation(); renderAff('w');};
+
 const FR=document.querySelector('#frame'); FR.addEventListener('scroll',()=>{ if(FR.scrollTop||FR.scrollLeft){ FR.scrollTop=0; FR.scrollLeft=0; } });
 fetch('story.json?'+Date.now()).then(r=>r.json()).then(d=>{ S=d; V=Object.assign({},d.vars);
   $('#afflbl').textContent=t('aff'); $('#go').textContent=t('play'); $('#hint0').textContent=t('hint'); $('#sub').textContent=LANG==='zh'?d.title_zh:'';
