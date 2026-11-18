@@ -157,7 +157,15 @@ let WANT=new Set();
 // 画质：高清（≤4 Mbps）/ 流畅（≤2 Mbps，同分辨率）。&q=hd / &q=lite 强制；否则按实测网速自动选，本次会话记住
 let LITE = Q.get('q')==='lite' || (Q.get('q')!=='hd' && ((()=>{ try{ return sessionStorage.getItem('cwi-q')==='lite'; }catch(_){ return false; } })()
   || (()=>{ const c=navigator.connection; return !!(c && ((c.downlink && c.downlink<6) || /2g|3g/.test(c.effectiveType||'') || c.saveData)); })()));  // 浏览器报告的网速（安卓 Chrome 有）
-function goLite(why){ if(LITE||Q.get('q')==='hd') return; LITE=true; try{ sessionStorage.setItem('cwi-q','lite'); }catch(_){}
+function goHD(why){ if(!LITE||Q.get('q')==='lite') return; LITE=false; try{ sessionStorage.setItem('cwi-q','hd'); }catch(_){}
+  POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('hd:',why); }
+/* 网速：每段正片从开播到整段下完，算“每秒下进几秒画面”。高清 <1.4 倍 → 流畅版；流畅版连续两段 >3 倍 → 回高清 */
+let MEAS=null, FAST=0;
+function measStart(v){ MEAS=v.loop?null:{v, t:performance.now(), b0:bufEnd(v)}; }
+setInterval(()=>{ if(!MEAS||MEAS.v!==front||!front.duration) return; if(bufEnd(front)<front.duration-0.3) return;
+  const sec=(performance.now()-MEAS.t)/1000, got=front.duration-MEAS.b0; MEAS=null; if(got<3||sec<0.3) return; const r=got/sec;
+  if(!LITE&&r<1.4) goLite('rate '+r.toFixed(2)); else if(LITE&&r>3){ if(++FAST>=2) goHD('rate '+r.toFixed(2)); } else FAST=0; },300);
+function goLite(why){ if(LITE||Q.get('q')==='hd') return; LITE=true; FAST=0; try{ sessionStorage.setItem('cwi-q','lite'); }catch(_){}
   POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('lite:',why); }
 const absu=s=>{ const u=/^https?:/.test(s)?s:new URL('../'+s, location.href).href; return (LITE&&S&&S.lite&&S.lite[u])||u; };
 const elFor=u=>POOL.find(e=>e.dataset.u===u);
@@ -187,7 +195,7 @@ function plan(id){ const n=S.nodes[id]; if(!n||cur!==id) return; const L=[];
 function swap(src, loop){ const u=absu(src); let b=elFor(u); if(!b||b===front){ b=spare(); b.dataset.u=u; b.src=u; }
   delete b.dataset.warm; b.dataset.t=Date.now(); b.pause(); try{ b.currentTime=0; }catch(e){} b.playbackRate=1; b.loop=!!loop; b.muted=false; b.dataset.node=loop?'':cur;
   if(b.readyState<3) $('#loading').style.display='block';
-  return b.play().then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
+  return b.play().then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; measStart(b); if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
     if(!loop&&window.RT) RT.begin({key:'node:'+cur, parts:[{v:b, d:b.duration}], free:true}); }); }
 function cap(){ const n=S.nodes[cur], box=$('#cap'); if(!n||mode!=='play'||!cc||uiUp||front.dataset.node!==cur){ box.innerHTML=''; return; }
   const tt=front.currentTime, c=(n.captions||[]).find(c=>tt>=c.s-.05&&tt<=c.e+.2); if(!c){ box.innerHTML=''; return; }
