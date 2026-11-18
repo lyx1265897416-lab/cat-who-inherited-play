@@ -164,7 +164,7 @@ let MEAS=null, FAST=0;
 function measStart(v){ MEAS=v.loop?null:{v, t:performance.now(), b0:bufEnd(v)}; }
 setInterval(()=>{ if(!MEAS||MEAS.v!==front||!front.duration) return; if(bufEnd(front)<front.duration-0.3) return;
   const sec=(performance.now()-MEAS.t)/1000, got=front.duration-MEAS.b0; MEAS=null; if(got<3||sec<0.3) return; const r=got/sec;
-  if(!LITE&&r<1.4) goLite('rate '+r.toFixed(2)); else if(LITE&&r>3){ if(++FAST>=2) goHD('rate '+r.toFixed(2)); } else FAST=0; },300);
+  if(!LITE&&r<1.15) goLite('rate '+r.toFixed(2)); else if(LITE&&r>3){ if(++FAST>=2) goHD('rate '+r.toFixed(2)); } else FAST=0; },300);
 function goLite(why){ if(LITE||Q.get('q')==='hd') return; LITE=true; FAST=0; try{ sessionStorage.setItem('cwi-q','lite'); }catch(_){}
   POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('lite:',why); }
 const absu=s=>{ const u=/^https?:/.test(s)?s:new URL('../'+s, location.href).href; return (LITE&&S&&S.lite&&S.lite[u])||u; };
@@ -176,9 +176,9 @@ const WARM_SEC=4; let QUEUE=[], warming=null;
 function bufEnd(e){ try{ const b=e.buffered; return b.length? b.end(b.length-1):0; }catch(_){ return 0; } }
 function warmDone(e){ return e.readyState>=3 && bufEnd(e)>=Math.min(WARM_SEC,(e.duration||WARM_SEC)-0.2); }
 function warm(src){ if(!src) return; const u=absu(src); if(elFor(u)) return; const e=spare(); if(!e) return;
-  e.dataset.u=u; e.dataset.t=Date.now(); delete e.dataset.t0; e.addEventListener('loadeddata',()=>{ if(e.dataset.u===u) e.dataset.t0=Date.now(); },{once:true}); e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
+  e.dataset.u=u; e.dataset.t=Date.now(); delete e.dataset.t0; e.addEventListener('loadeddata',()=>{ if(e.dataset.u===u&&e.dataset.warm&&e!==front){ e.pause(); try{ e.currentTime=0; }catch(_){} } },{once:true}); /* 拿到首帧就停：不解码、不走位，浏览器按 preload=auto 继续缓冲 */ e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
 function frontReady(){ if(!front.src) return true; if(front.loop) return front.readyState>=3;  // 待机循环能顺播就开始预载下一段
-  return !!(front.duration && bufEnd(front)>=front.duration-0.3); }
+  return !!(front.duration && bufEnd(front)>=Math.min(front.duration-0.3, front.currentTime+6)); }  // 当前片已多缓冲 6 秒（或下完）才开始后台预载
 setInterval(()=>{  // 预载调度：每 0.4 秒看一次
   if(warming && warming.dataset.warm){ const el=(Date.now()-(+warming.dataset.t))/1000;
     if(warmDone(warming)||el>15){ warming.pause(); warming=null; } else return; }
@@ -287,7 +287,8 @@ function renderMenu(){ const Z=LANG==='zh', curEp=cur&&S.nodes[cur]?S.nodes[cur]
     ['#start','#endc'].forEach(q=>$(q).style.display='none'); front.pause(); go(e.start); }); }
 $('#bmenu').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); renderMenu(); $('#menu').classList.add('on');};
 $('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'); if(mode==='play') front.play();};
-POOL.forEach(v=>v.addEventListener('waiting',()=>{ if(v===front&&mode==='play'&&!v.loop&&v.currentTime>0.3) goLite('stall'); }));  // 播放中真卡了一次 → 后面全部改流畅版
+POOL.forEach(v=>v.addEventListener('waiting',()=>{ if(v!==front||mode!=='play'||v.loop||v.currentTime<0.3) return;  // 播放中真卡住超过 0.5 秒 → 后面全部改流畅版（几毫秒的解码交接不算）
+  setTimeout(()=>{ if(v===front&&!v.paused&&v.readyState<3) goLite('stall'); },500); }));
 POOL.forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
 $('#bcc').onclick=e=>{e.stopPropagation(); cc=!cc; $('#bcc').classList.toggle('off',!cc);};
 function hearts(x){ const n=Math.max(0,Math.min(5,Math.round((x||0)/3))); return '♥'.repeat(n)+'♡'.repeat(5-n); }
