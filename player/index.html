@@ -154,7 +154,11 @@ function media(n){ return n.media.none||Object.values(n.media)[0]; }
 const POOL=[va,vb];
 for(let i=0;i<5;i++){ const e=document.createElement('video'); e.setAttribute('playsinline',''); e.playsInline=true; e.preload='auto'; vb.after(e); POOL.push(e); }
 let WANT=new Set();
-const absu=s=>/^https?:/.test(s)?s:new URL('../'+s, location.href).href;
+// 画质：高清（≤4 Mbps）/ 流畅（≤2 Mbps，同分辨率）。&q=hd / &q=lite 强制；否则按实测网速自动选，本次会话记住
+let LITE = Q.get('q')==='lite' || (Q.get('q')!=='hd' && (()=>{ try{ return sessionStorage.getItem('cwi-q')==='lite'; }catch(_){ return false; } })());
+function goLite(why){ if(LITE||Q.get('q')==='hd') return; LITE=true; try{ sessionStorage.setItem('cwi-q','lite'); }catch(_){}
+  POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('lite:',why); }
+const absu=s=>{ const u=/^https?:/.test(s)?s:new URL('../'+s, location.href).href; return (LITE&&S&&S.lite&&S.lite[u])||u; };
 const elFor=u=>POOL.find(e=>e.dataset.u===u);
 function spare(){ return POOL.filter(e=>e!==front&&!WANT.has(e.dataset.u)).sort((a,b)=>(+a.dataset.t||0)-(+b.dataset.t||0))[0]||POOL.find(e=>e!==front); }
 /* 预载 v2（防卡）：一次只缓冲一个；每个缓冲到约 4 秒就暂停（停止解码），再缓冲下一个；
@@ -163,11 +167,14 @@ const WARM_SEC=4; let QUEUE=[], warming=null;
 function bufEnd(e){ try{ const b=e.buffered; return b.length? b.end(b.length-1):0; }catch(_){ return 0; } }
 function warmDone(e){ return e.readyState>=3 && bufEnd(e)>=Math.min(WARM_SEC,(e.duration||WARM_SEC)-0.2); }
 function warm(src){ if(!src) return; const u=absu(src); if(elFor(u)) return; const e=spare(); if(!e) return;
-  e.dataset.u=u; e.dataset.t=Date.now(); e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
+  e.dataset.u=u; e.dataset.t=Date.now(); delete e.dataset.t0; e.addEventListener('loadeddata',()=>{ if(e.dataset.u===u) e.dataset.t0=Date.now(); },{once:true}); e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
 function frontReady(){ if(!front.src) return true; if(front.loop) return front.readyState>=3;  // 待机循环能顺播就开始预载下一段
-  return front.readyState>=4 || (front.duration && bufEnd(front)>=Math.min(front.duration-0.3, front.currentTime+8)); }
+  return !!(front.duration && bufEnd(front)>=front.duration-0.3); }
 setInterval(()=>{  // 预载调度：每 0.4 秒看一次
-  if(warming && warming.dataset.warm){ if(warmDone(warming)||Date.now()-(+warming.dataset.t)>15000){ warming.pause(); warming=null; } else return; }
+  if(warming && warming.dataset.warm){ const el=(Date.now()-(+warming.dataset.t))/1000;
+    const t0=+warming.dataset.t0, dl=t0?(Date.now()-t0)/1000:0;  // 从拿到首帧数据起算，扣掉 CDN 首字节延迟
+    if(!LITE && dl>2.5 && bufEnd(warming)/dl<1.5) { goLite('slow preload '+(bufEnd(warming)/dl).toFixed(2)); return; }
+    if(warmDone(warming)||el>15){ warming.pause(); warming=null; } else return; }
   warming=null; if(!QUEUE.length||!frontReady()) return;
   warm(QUEUE.shift());
 },400);
@@ -273,6 +280,7 @@ function renderMenu(){ const Z=LANG==='zh', curEp=cur&&S.nodes[cur]?S.nodes[cur]
     ['#start','#endc'].forEach(q=>$(q).style.display='none'); front.pause(); go(e.start); }); }
 $('#bmenu').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); renderMenu(); $('#menu').classList.add('on');};
 $('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'); if(mode==='play') front.play();};
+let STALLS=0; POOL.forEach(v=>v.addEventListener('waiting',()=>{ if(v===front&&mode==='play'&&v.currentTime>0.3&&++STALLS>=2) goLite('stalls'); }));
 POOL.forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
 $('#bcc').onclick=e=>{e.stopPropagation(); cc=!cc; $('#bcc').classList.toggle('off',!cc);};
 function hearts(x){ const n=Math.max(0,Math.min(5,Math.round((x||0)/3))); return '♥'.repeat(n)+'♡'.repeat(5-n); }
