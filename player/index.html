@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <title>The Cat Who Inherited Everything · 继承一切的猫</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 /* 布局、字幕、选项、动作圈、面板、开始/结束页与《日落岛》播放器保持一致 */
 :root{--gold:#f1d6a6;--rose:#e8b46a;--amber:#E2B15B;--amber2:#C0812F;--ink:#fbf6ee;--mute:#cfc6bb;--glass:#ffffff1f;--line:#ffffff33}
@@ -157,13 +157,26 @@ let WANT=new Set();
 const absu=s=>/^https?:/.test(s)?s:new URL('../'+s, location.href).href;
 const elFor=u=>POOL.find(e=>e.dataset.u===u);
 function spare(){ return POOL.filter(e=>e!==front&&!WANT.has(e.dataset.u)).sort((a,b)=>(+a.dataset.t||0)-(+b.dataset.t||0))[0]||POOL.find(e=>e!==front); }
+/* 预载 v2（防卡）：一次只缓冲一个；每个缓冲到约 6 秒就暂停（停止解码），再缓冲下一个；
+   当前正在看的片段没缓冲完之前不开始后台预载，不和它抢带宽。顺序：待机循环 → 下一段 / 各选项去向。 */
+const WARM_SEC=6; let QUEUE=[], warming=null;
+function bufEnd(e){ try{ const b=e.buffered; return b.length? b.end(b.length-1):0; }catch(_){ return 0; } }
+function warmDone(e){ return e.readyState>=3 && bufEnd(e)>=Math.min(WARM_SEC,(e.duration||WARM_SEC)-0.2); }
 function warm(src){ if(!src) return; const u=absu(src); if(elFor(u)) return; const e=spare(); if(!e) return;
-  e.dataset.u=u; e.dataset.t=Date.now(); e.dataset.warm='1'; e.muted=true; e.loop=false; e.src=u; e.playbackRate=0.07; const p=e.play(); if(p) p.catch(()=>{}); }
+  e.dataset.u=u; e.dataset.t=Date.now(); e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
+function frontReady(){ return !front.src || (front.duration && bufEnd(front)>=Math.min(front.duration-0.3, front.currentTime+12)); }
+setInterval(()=>{  // 预载调度：每 0.4 秒看一次
+  if(warming && warming.dataset.warm){ if(warmDone(warming)||Date.now()-(+warming.dataset.t)>15000){ warming.pause(); warming=null; } else return; }
+  warming=null; if(!QUEUE.length||!frontReady()) return;
+  warm(QUEUE.shift());
+},400);
 function target(id){ const n=S.nodes[id]; return n&&n.media&&Object.keys(n.media).length?media(n):null; }
 function plan(id){ const n=S.nodes[id]; if(!n||cur!==id) return; const L=[];
   if(n.qte||n.choice){ L.push(idleOf(n)); if(n.choice) n.choice.options.forEach(x=>L.push(target(x.goto))); if(n.qte){ L.push(target(n.qte.goto)); if(n.qte.timeout&&n.qte.timeout!==n.qte.goto) L.push(target(n.qte.timeout)); } }
   else if(n.next) L.push(target(n.next));
-  const want=L.filter(Boolean).slice(0,5); WANT=new Set(want.map(absu)); want.forEach(warm); }
+  const want=L.filter(Boolean).slice(0,5); WANT=new Set(want.map(absu));
+  POOL.forEach(e=>{ if(e!==front&&e.dataset.warm&&!WANT.has(e.dataset.u)) e.pause(); });  // 不再需要的预载停掉
+  QUEUE=want.filter(u=>{ const e=elFor(absu(u)); return !(e&&warmDone(e)); }); }
 function swap(src, loop){ const u=absu(src); let b=elFor(u); if(!b||b===front){ b=spare(); b.dataset.u=u; b.src=u; }
   delete b.dataset.warm; b.dataset.t=Date.now(); b.pause(); try{ b.currentTime=0; }catch(e){} b.playbackRate=1; b.loop=!!loop; b.muted=false; b.dataset.node=loop?'':cur;
   if(b.readyState<3) $('#loading').style.display='block';
@@ -274,7 +287,7 @@ fetch((Q.get('v')==='b'?'story-b.json?':'story.json?')+Date.now()).then(r=>r.jso
   $('#afflbl').textContent=t('aff'); $('#go').textContent=t('play'); $('#hint0').textContent=t('hint'); $('#sub').textContent=LANG==='zh'?d.title_zh:'';
   $('#k0').textContent=LANG==='zh'?'互动治愈悬疑剧':'AN INTERACTIVE COZY MYSTERY';
   $('#start').style.backgroundImage="url('poster.jpg')";
-  $('#go').onclick=e=>{ e.stopPropagation(); $('#start').style.display='none'; POOL.forEach(v=>{ if(!v.dataset.u){ const p=v.play(); if(p) p.catch(()=>{}); } }); go(Q.get('node')||d.start); };
+  $('#go').onclick=e=>{ e.stopPropagation(); $('#start').style.display='none'; POOL.forEach(v=>{ if(!v.dataset.u){ const p=v.play(); if(p) p.then(()=>v.pause()).catch(()=>{}); } }); go(Q.get('node')||d.start); };
   { const n0=S.nodes[Q.get('node')||d.start]; if(n0&&n0.media&&Object.keys(n0.media).length) warm(media(n0)); }  // 首段在封面页就开始缓冲
   RT.init({drama:'cat-who-inherited', stage:'#frame', zh:()=>LANG==='zh', isPlaying:()=>mode==='play'&&!uiUp, ignore:'#top,#qte,#choice,#ring,#hearts,.sheet,.screen,#meet,#menu'});
   requestAnimationFrame(tick); });
