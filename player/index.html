@@ -155,7 +155,8 @@ const POOL=[va,vb];
 for(let i=0;i<5;i++){ const e=document.createElement('video'); e.setAttribute('playsinline',''); e.playsInline=true; e.preload='auto'; vb.after(e); POOL.push(e); }
 let WANT=new Set();
 // 画质：高清（≤4 Mbps）/ 流畅（≤2 Mbps，同分辨率）。&q=hd / &q=lite 强制；否则按实测网速自动选，本次会话记住
-let LITE = Q.get('q')==='lite' || (Q.get('q')!=='hd' && (()=>{ try{ return sessionStorage.getItem('cwi-q')==='lite'; }catch(_){ return false; } })());
+let LITE = Q.get('q')==='lite' || (Q.get('q')!=='hd' && ((()=>{ try{ return sessionStorage.getItem('cwi-q')==='lite'; }catch(_){ return false; } })()
+  || (()=>{ const c=navigator.connection; return !!(c && ((c.downlink && c.downlink<6) || /2g|3g/.test(c.effectiveType||'') || c.saveData)); })()));  // 浏览器报告的网速（安卓 Chrome 有）
 function goLite(why){ if(LITE||Q.get('q')==='hd') return; LITE=true; try{ sessionStorage.setItem('cwi-q','lite'); }catch(_){}
   POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('lite:',why); }
 const absu=s=>{ const u=/^https?:/.test(s)?s:new URL('../'+s, location.href).href; return (LITE&&S&&S.lite&&S.lite[u])||u; };
@@ -172,8 +173,6 @@ function frontReady(){ if(!front.src) return true; if(front.loop) return front.r
   return !!(front.duration && bufEnd(front)>=front.duration-0.3); }
 setInterval(()=>{  // 预载调度：每 0.4 秒看一次
   if(warming && warming.dataset.warm){ const el=(Date.now()-(+warming.dataset.t))/1000;
-    const t0=+warming.dataset.t0, dl=t0?(Date.now()-t0)/1000:0;  // 从拿到首帧数据起算，扣掉 CDN 首字节延迟
-    if(!LITE && dl>2.5 && bufEnd(warming)/dl<1.5) { goLite('slow preload '+(bufEnd(warming)/dl).toFixed(2)); return; }
     if(warmDone(warming)||el>15){ warming.pause(); warming=null; } else return; }
   warming=null; if(!QUEUE.length||!frontReady()) return;
   warm(QUEUE.shift());
@@ -280,7 +279,7 @@ function renderMenu(){ const Z=LANG==='zh', curEp=cur&&S.nodes[cur]?S.nodes[cur]
     ['#start','#endc'].forEach(q=>$(q).style.display='none'); front.pause(); go(e.start); }); }
 $('#bmenu').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); renderMenu(); $('#menu').classList.add('on');};
 $('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'); if(mode==='play') front.play();};
-let STALLS=0; POOL.forEach(v=>v.addEventListener('waiting',()=>{ if(v===front&&mode==='play'&&v.currentTime>0.3&&++STALLS>=2) goLite('stalls'); }));
+POOL.forEach(v=>v.addEventListener('waiting',()=>{ if(v===front&&mode==='play'&&!v.loop&&v.currentTime>0.3) goLite('stall'); }));  // 播放中真卡了一次 → 后面全部改流畅版
 POOL.forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
 $('#bcc').onclick=e=>{e.stopPropagation(); cc=!cc; $('#bcc').classList.toggle('off',!cc);};
 function hearts(x){ const n=Math.max(0,Math.min(5,Math.round((x||0)/3))); return '♥'.repeat(n)+'♡'.repeat(5-n); }
