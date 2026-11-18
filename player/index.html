@@ -270,7 +270,7 @@ $('#baff').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); $('
 $('#affback').onclick=e=>{e.stopPropagation(); $('#aff').classList.remove('on'); if(mode==='play') front.play();};
 
 const FR=document.querySelector('#frame'); FR.addEventListener('scroll',()=>{ if(FR.scrollTop||FR.scrollLeft){ FR.scrollTop=0; FR.scrollLeft=0; } });
-fetch('story.json?'+Date.now()).then(r=>r.json()).then(d=>{ S=d; V=Object.assign({},d.vars);
+fetch((Q.get('v')==='b'?'story-b.json?':'story.json?')+Date.now()).then(r=>r.json()).then(d=>{ S=d; V=Object.assign({},d.vars);
   $('#afflbl').textContent=t('aff'); $('#go').textContent=t('play'); $('#hint0').textContent=t('hint'); $('#sub').textContent=LANG==='zh'?d.title_zh:'';
   $('#k0').textContent=LANG==='zh'?'互动治愈悬疑剧':'AN INTERACTIVE COZY MYSTERY';
   $('#start').style.backgroundImage="url('poster.jpg')";
