@@ -164,7 +164,8 @@ function bufEnd(e){ try{ const b=e.buffered; return b.length? b.end(b.length-1):
 function warmDone(e){ return e.readyState>=3 && bufEnd(e)>=Math.min(WARM_SEC,(e.duration||WARM_SEC)-0.2); }
 function warm(src){ if(!src) return; const u=absu(src); if(elFor(u)) return; const e=spare(); if(!e) return;
   e.dataset.u=u; e.dataset.t=Date.now(); e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
-function frontReady(){ return !front.src || (front.duration && bufEnd(front)>=Math.min(front.duration-0.3, front.currentTime+12)); }
+function frontReady(){ if(!front.src) return true; if(front.loop) return front.readyState>=3;  // 待机循环能顺播就开始预载下一段
+  return front.readyState>=4 || (front.duration && bufEnd(front)>=Math.min(front.duration-0.3, front.currentTime+8)); }
 setInterval(()=>{  // 预载调度：每 0.4 秒看一次
   if(warming && warming.dataset.warm){ if(warmDone(warming)||Date.now()-(+warming.dataset.t)>15000){ warming.pause(); warming=null; } else return; }
   warming=null; if(!QUEUE.length||!frontReady()) return;
