@@ -157,9 +157,9 @@ let WANT=new Set();
 const absu=s=>/^https?:/.test(s)?s:new URL('../'+s, location.href).href;
 const elFor=u=>POOL.find(e=>e.dataset.u===u);
 function spare(){ return POOL.filter(e=>e!==front&&!WANT.has(e.dataset.u)).sort((a,b)=>(+a.dataset.t||0)-(+b.dataset.t||0))[0]||POOL.find(e=>e!==front); }
-/* 预载 v2（防卡）：一次只缓冲一个；每个缓冲到约 6 秒就暂停（停止解码），再缓冲下一个；
+/* 预载 v2（防卡）：一次只缓冲一个；每个缓冲到约 4 秒就暂停（停止解码），再缓冲下一个；
    当前正在看的片段没缓冲完之前不开始后台预载，不和它抢带宽。顺序：待机循环 → 下一段 / 各选项去向。 */
-const WARM_SEC=6; let QUEUE=[], warming=null;
+const WARM_SEC=4; let QUEUE=[], warming=null;
 function bufEnd(e){ try{ const b=e.buffered; return b.length? b.end(b.length-1):0; }catch(_){ return 0; } }
 function warmDone(e){ return e.readyState>=3 && bufEnd(e)>=Math.min(WARM_SEC,(e.duration||WARM_SEC)-0.2); }
 function warm(src){ if(!src) return; const u=absu(src); if(elFor(u)) return; const e=spare(); if(!e) return;
