@@ -154,20 +154,8 @@ function media(n){ return n.media.none||Object.values(n.media)[0]; }
 const POOL=[va,vb];
 for(let i=0;i<5;i++){ const e=document.createElement('video'); e.setAttribute('playsinline',''); e.playsInline=true; e.preload='auto'; vb.after(e); POOL.push(e); }
 let WANT=new Set();
-// 画质：高清（≤4 Mbps）/ 流畅（≤2 Mbps，同分辨率）。&q=hd / &q=lite 强制；否则按实测网速自动选，本次会话记住
-let LITE = Q.get('q')==='lite' || (Q.get('q')!=='hd' && ((()=>{ try{ return sessionStorage.getItem('cwi-q')==='lite'; }catch(_){ return false; } })()
-  || (()=>{ const c=navigator.connection; return !!(c && ((c.downlink && c.downlink<6) || /2g|3g/.test(c.effectiveType||'') || c.saveData)); })()));  // 浏览器报告的网速（安卓 Chrome 有）
-function goHD(why){ if(!LITE||Q.get('q')==='lite') return; LITE=false; try{ sessionStorage.setItem('cwi-q','hd'); }catch(_){}
-  POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('hd:',why); }
-/* 网速：每段正片从开播到整段下完，算“每秒下进几秒画面”。高清 <1.4 倍 → 流畅版；流畅版连续两段 >3 倍 → 回高清 */
-let MEAS=null, FAST=0;
-function measStart(v){ MEAS=v.loop?null:{v, t:performance.now(), b0:bufEnd(v)}; }
-setInterval(()=>{ if(!MEAS||MEAS.v!==front||!front.duration) return; if(bufEnd(front)<front.duration-0.3) return;
-  const sec=(performance.now()-MEAS.t)/1000, got=front.duration-MEAS.b0; MEAS=null; if(got<3||sec<0.3) return; const r=got/sec;
-  if(!LITE&&r<1.15) goLite('rate '+r.toFixed(2)); else if(LITE&&r>3){ if(++FAST>=2) goHD('rate '+r.toFixed(2)); } else FAST=0; },300);
-function goLite(why){ if(LITE||Q.get('q')==='hd') return; LITE=true; FAST=0; try{ sessionStorage.setItem('cwi-q','lite'); }catch(_){}
-  POOL.forEach(e=>{ if(e!==front&&e.dataset.u){ e.pause(); e.removeAttribute('src'); delete e.dataset.u; delete e.dataset.warm; e.load(); } }); warming=null; if(cur) plan(cur); console.log('lite:',why); }
-const absu=s=>{ const u=/^https?:/.test(s)?s:new URL('../'+s, location.href).href; return (LITE&&S&&S.lite&&S.lite[u])||u; };
+// Always use the approved original files. Network quality only affects buffering, never picture quality.
+const absu=s=>/^https?:/.test(s)?s:new URL('../'+s, location.href).href;
 const elFor=u=>POOL.find(e=>e.dataset.u===u);
 function spare(){ return POOL.filter(e=>e!==front&&!WANT.has(e.dataset.u)).sort((a,b)=>(+a.dataset.t||0)-(+b.dataset.t||0))[0]||POOL.find(e=>e!==front); }
 /* 预载 v2（防卡）：一次只缓冲一个；每个缓冲到约 4 秒就暂停（停止解码），再缓冲下一个；
@@ -195,7 +183,7 @@ function plan(id){ const n=S.nodes[id]; if(!n||cur!==id) return; const L=[];
 function swap(src, loop){ const u=absu(src); let b=elFor(u); if(!b||b===front){ b=spare(); b.dataset.u=u; b.src=u; }
   delete b.dataset.warm; b.dataset.t=Date.now(); b.pause(); try{ b.currentTime=0; }catch(e){} b.playbackRate=1; b.loop=!!loop; b.muted=false; b.dataset.node=loop?'':cur;
   if(b.readyState<3) $('#loading').style.display='block';
-  return b.play().then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; measStart(b); if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
+  return b.play().then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
     if(!loop&&window.RT) RT.begin({key:'node:'+cur, parts:[{v:b, d:b.duration}], free:true}); }); }
 function cap(){ const n=S.nodes[cur], box=$('#cap'); if(!n||mode!=='play'||!cc||uiUp||front.dataset.node!==cur){ box.innerHTML=''; return; }
   const tt=front.currentTime, c=(n.captions||[]).find(c=>tt>=c.s-.05&&tt<=c.e+.2); if(!c){ box.innerHTML=''; return; }
@@ -287,8 +275,10 @@ function renderMenu(){ const Z=LANG==='zh', curEp=cur&&S.nodes[cur]?S.nodes[cur]
     ['#start','#endc'].forEach(q=>$(q).style.display='none'); front.pause(); go(e.start); }); }
 $('#bmenu').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); renderMenu(); $('#menu').classList.add('on');};
 $('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'); if(mode==='play') front.play();};
-POOL.forEach(v=>v.addEventListener('waiting',()=>{ if(v!==front||mode!=='play'||v.loop||v.currentTime<0.3) return;  // 播放中真卡住超过 0.5 秒 → 后面全部改流畅版（几毫秒的解码交接不算）
-  setTimeout(()=>{ if(v===front&&!v.paused&&v.readyState<3) goLite('stall'); },500); }));
+POOL.forEach(v=>{
+  v.addEventListener('waiting',()=>{ if(v===front && mode==='play') $('#loading').style.display='block'; });
+  v.addEventListener('playing',()=>{ if(v===front) $('#loading').style.display='none'; });
+});
 POOL.forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
 $('#bcc').onclick=e=>{e.stopPropagation(); cc=!cc; $('#bcc').classList.toggle('off',!cc);};
 function hearts(x){ const n=Math.max(0,Math.min(5,Math.round((x||0)/3))); return '♥'.repeat(n)+'♡'.repeat(5-n); }

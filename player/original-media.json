@@ -1,0 +1,590 @@
+{
+  "date": "2026-11-23",
+  "policy": "Byte-identical approved masters; no publication encoding and no adaptive bitrate downgrade",
+  "files": [
+    {
+      "path": "ep1/idle/open2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_1f6ab7de54f84315b4dde4341224d31f-open2.mp4",
+      "bytes": 1158746,
+      "sha256": "1ddfe4e5c1c74c2d08615c657a81a309656db5345ff17c349df167991a3124cf",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep1/out/c1a.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_7fb3a3ec3a8141ac884f0849e8c409e6-c1a.mp4",
+      "bytes": 8721620,
+      "sha256": "134f67745b81af02b1ebb5549a721b851780721f11548b2f5976f001dfa3d8eb",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep1/out/c1b.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_00bb41cf4ff048b1965fce56ecc1d1ba-c1b.mp4",
+      "bytes": 6719709,
+      "sha256": "119e056d1ee3753688d65a5044350372d4a707bb019c1883f8ef7f4dca85a43d",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep1/out/movein.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_0eaa4b62c633404fa867a087a52a20c2-movein.mp4",
+      "bytes": 6260757,
+      "sha256": "901223c11d5aa7528097c0f6688aaa599e1d2cbe6b64dd48c29e88060ceadb51",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep1/out/movein0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_ddd5fbbec8434d8bad15f012c3c72ef9-movein0.mp4",
+      "bytes": 4081143,
+      "sha256": "e54dd0aedd3d1e92ae8a4c618462c46af27a79d80cb462c640d9a43a32f29f6a",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep1/out/open.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_3cd4f0573b9c49958560da8b57018873-open.mp4",
+      "bytes": 8369354,
+      "sha256": "e2c450d7425bd6a0d6d6cf074e1341dfd1debb0e720513e63489622592d800ec",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep1/out/open2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_022b9c685ac94ba0ad97f7eeba199c29-open2.mp4",
+      "bytes": 7132444,
+      "sha256": "e7ff7244120abe8fd16a597b1f086fe315f461bf2b665e9d3cd676526f63ea21",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/idle/e2_bb1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_07b6de9ba4274aeb9a06ca3744590b7a-e2_bb1.mp4",
+      "bytes": 1018880,
+      "sha256": "de6f1bc38db91a6f865394346d875bba47120ad708ee12f372e8dca03aeac3e2",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/idle/e2_choice.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/7c2ffe3ee3a5468680148a771b82fdb6/e2_choice.mp4",
+      "bytes": 1098954,
+      "sha256": "270c174ae3bb345e495017fb5c22bcaad3ecdc2145f85e75ce902c5d5251b925",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/idle/e2_wait.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/fa2586b274e74f759865b2c3f7abf277/e2_wait.mp4",
+      "bytes": 805100,
+      "sha256": "7b9f49a6d5bad66f859be99f14dca149c5dd87a75a256fcfe3aed8265f68e979",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/idle/e2m1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/ca0841487d84423daa2dd606a23d4194/e2m1.mp4",
+      "bytes": 1060921,
+      "sha256": "06d4808bb4a5e5e6ff303b552d2e6db1c04c3a9817237edc2ef9acbf3dbca73d",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_bath.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_3e29767607584c55b7b3a8524eabcff6-e2_bath.mp4",
+      "bytes": 5717140,
+      "sha256": "eb9e24d6e74a54fc4dbb992f1de78d5a6b659ffb6847012faf6457f97ac76026",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_bb1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_8d38bdeec7c54d27bfec2a28872d3f5b-e2_bb1.mp4",
+      "bytes": 2195086,
+      "sha256": "d1d0a3f2b3b30ffef9f55f90bfea6137aa96f7288473d091beb29838b1ee01e1",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_bb2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_d3d190d642c64dde906b55e529c2e4aa-e2_bb2.mp4",
+      "bytes": 1820735,
+      "sha256": "f476c4280cbe197383a2ee2d2074982571efba7c4bcc714c3a346d4a92e59bc2",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_choice.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_4dde6313c1704bc68717e51698401d24-e2_choice.mp4",
+      "bytes": 2289796,
+      "sha256": "8ea8443bdb0854dbedf0f8c39ade0032526f679cbe1ffea00a7bba5eba674556",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_knob.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_b42c4a115c8a4632a587ab0fc928c228-e2_knob.mp4",
+      "bytes": 2054154,
+      "sha256": "decc8ff3f4855ff727f82e1fc052f3597d073a6607db559a93d3952ed7c8cb3e",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_ownbed.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_adb8af8c7dac4bff9e410159f79ba113-e2_ownbed.mp4",
+      "bytes": 2303454,
+      "sha256": "2da332200c73f1142cc61221438696ecf1a514fb3001d992812eb289f87c2ad1",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_tobed.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_b5c3eca068724bd18d77a93a35ef2e77-e2_tobed.mp4",
+      "bytes": 4301369,
+      "sha256": "bf91a409559d5fd4e33e04807257e44a441001bcaee5eb3c1a42cae99dd9d342",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_wait.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_a245feaecd934c66a8109c6b98898308-e2_wait.mp4",
+      "bytes": 2100326,
+      "sha256": "3d30e699409629df9e1ebfaf5622d8f2045ef22a607eb1d326c7ac58a4849f37",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2_wait0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_0529a9e1dd6f4614bf81b8e29ed78af9-e2_wait0.mp4",
+      "bytes": 2344440,
+      "sha256": "3330349f313fafdae60858f659096bbc525b3af2b7e6532ce4812353af391102",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2a.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_6b26b45b5a894eb1ac688017fe9a0aa3-e2a.mp4",
+      "bytes": 9457932,
+      "sha256": "0625d94d5cf12dcd65630cf4ce01c92b61cb82906a9158f2f48b1a2c19faeadd",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2b0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_265c760b9f7440c1ad918cb8c691fc5c-e2b0.mp4",
+      "bytes": 2098967,
+      "sha256": "3d344d428502275b6b9f00f93d61dc983b43b4307faef49dd48a230e093c89b4",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2m1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_e5266c2e3e724f77b5cb170abad7711f-e2m1.mp4",
+      "bytes": 1549499,
+      "sha256": "83065a13c70376690245bba7da5ac958eb515766c4e5a6a056136e22ab2aaf07",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep2/out/e2m2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_842c74eda5064c0b9f424b0d83af8b10-e2m2.mp4",
+      "bytes": 1555428,
+      "sha256": "0546154620ca7874ab5f8962fa56a681f0e2e11d7f665af230b1db40e52926ba",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/idle/e3_car.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/a0f23c22b818408bba9b21da5e9fe03f/e3_car.mp4",
+      "bytes": 1276580,
+      "sha256": "0221694382f503b5f0707644f05b7b6625a145840783fa13d5f804781b87b957",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/idle/e3_celeste.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_95e0e7d364cc45ecbf618ed5f3b80244-e3_celeste.mp4",
+      "bytes": 1182310,
+      "sha256": "4867ede751cba1f37d00aebb59bb8575525e415e102ac120c56ce44616c45bdb",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/idle/e3_door.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/1cb26b7e3711445997a86416a8f50db7/e3_door.mp4",
+      "bytes": 1294940,
+      "sha256": "458acbb3044d0da5c57639dad557b1fa52b7bd2ce7df480cc7a6c5c4b1af2731",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/idle/e3_shop.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/2651cc7f60bb49b7b1592be7e4820ab8/e3_shop.mp4",
+      "bytes": 597427,
+      "sha256": "b7473a9c13d0f6cc34b253f1b56d353125cc239d6f1a270c30c625bce3cad1f8",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_A.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_d0ab3e6bd7f04a01bca0c28f0e8c9be3-e3_A.mp4",
+      "bytes": 4038943,
+      "sha256": "797fa2c78d4b78a35fa9736d2932e2efddbc28f4cce65d59a72bb12698b0259d",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_A2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_745515eea135480eafb408f4e7fc3a8d-e3_A2.mp4",
+      "bytes": 2530123,
+      "sha256": "711480d3191fdefe1491eaf029120c524f3a8d6440cb10dd8c8e0876ef573ca0",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_B.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_74e8439026d342db9e0a6e82516fce14-e3_B.mp4",
+      "bytes": 3991665,
+      "sha256": "b9ea9022f8bbeb05c205060bd1efba9dad57b780f6c0eceface5732032a682b2",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_arrive.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_98d4f2c1a91848259c0597caaffc9961-e3_arrive.mp4",
+      "bytes": 3942381,
+      "sha256": "0f097430d833452affa2cfc7e55dafbeaa67465bbd2ae70959bcf37849386c25",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_bk0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_c71a21b74a5d44fbb3dd84b666800a62-e3_bk0.mp4",
+      "bytes": 3024183,
+      "sha256": "9ae16c45ef4c1b8fdb7b8aa67a01a2eb636ba5e5c3b452d55b3535002846292f",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_breakfast.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_64871f77430f410898bf14cbf8d6f076-e3_breakfast.mp4",
+      "bytes": 3795787,
+      "sha256": "c453260f275dcbf11e572ea1326bb06ed9df773db4964577b851d1b5ce067871",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_car.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_8cec951264194002bcbaaaae28b740b1-e3_car.mp4",
+      "bytes": 3711516,
+      "sha256": "06863589f1c9f0c823a9a2b1dae57a2dda92b8b81440911b8a11dbaa9e7e6ddb",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_celeste.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_ab4a386d5fe948ccad9c59f94ddfaf1b-e3_celeste.mp4",
+      "bytes": 10907236,
+      "sha256": "89702b3e1fb64b454f88a137798e96ea6d41fee6cf988d8f4bcc16ec1539ac24",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_door.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_bcb9dc2dfcbf43579360d2b8ae691dbe-e3_door.mp4",
+      "bytes": 1439203,
+      "sha256": "868e16dc3c421e6803aeecf4dfd4a207c083704a1f5fcd4552ed50ecc5cfc9ab",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_enter.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_5b78c83852ac4f91be790f3ec1092023-e3_enter.mp4",
+      "bytes": 3510124,
+      "sha256": "6d07f57e3cb1bcf9a163c706e9ed10a8eaf2f2589a5b51a983c320ae28a949ba",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_graves.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_fcf2862a553a4ce4a55cdb6bfb878c82-e3_graves.mp4",
+      "bytes": 5083056,
+      "sha256": "cc729c5bbe42e891ca8e5a9425aded98a2d93870415892d5ec1165db26d09596",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_morning.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_019cdcb362f448de9db97792992c1ba7-e3_morning.mp4",
+      "bytes": 2651891,
+      "sha256": "c1483fd9d89391f0e631d356653989efaa8b47f37f65d5e166c5a66b5bbb8edf",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_paid.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_3542bd7fe4e841f191bf7c6da95ca72e-e3_paid.mp4",
+      "bytes": 2079884,
+      "sha256": "f3abb47a7840d67f54359a7e37b5daae5b1f8fc950873e5dd252c00a397a018f",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep3/out/e3_shop.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_1ff46039a1de44be8ef550fb117150d7-e3_shop.mp4",
+      "bytes": 3027079,
+      "sha256": "5ff668d32fd2a91943a3dad132f6c0995d4c1180f240056c6c562b26686e1ab0",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/idle/e4_corridor.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/d03ddc02611c4f709e4a7fbe2b587749/e4_corridor.mp4",
+      "bytes": 1142164,
+      "sha256": "8ed000ef5b1cb5325203a1c93e701bef538e564cacd29d9d8b096f0ec67d47f9",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/idle/e4_found.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/28223e2fe8c749dda48f66232349fef4/e4_found.mp4",
+      "bytes": 1158781,
+      "sha256": "f1bc40f7a27bf512d6fd7a8bfa67d982c11ffa0773c10323fef8f74f46d34958",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/idle/e4_scratch.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/4db07b3b62704220b252f6f18f96b75e/e4_scratch.mp4",
+      "bytes": 783577,
+      "sha256": "9d6860de2234b1f6305d5778095f3a65367c2196784f75a4c649c53c8e325a45",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_corridor.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/cad63784f76b4075b7c9594a951a588b/e4_corridor.mp4",
+      "bytes": 5092209,
+      "sha256": "2cc2330c17aba0c82fce81200909abe1ebffd2540ae9638bfec9ca166dff6518",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_found.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/8bab6ca8226e4990958da2cae1c9639f/e4_found.mp4",
+      "bytes": 6851246,
+      "sha256": "0e74057f5e3f377ba8a93b4586de4138a638d85d321cacef8391bdb336c6712e",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_home.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/1e3511fe29d74b3a9fc602bff88dce83/e4_home.mp4",
+      "bytes": 12568727,
+      "sha256": "cfe76d9d176f3788ee42fdf7a674130e5c56a5d9ab881038a12508e89e76186f",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_in.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/cf0bd992806e430993d8a0e274360ecb/e4_in.mp4",
+      "bytes": 8284098,
+      "sha256": "2116993c137d9bca44f4a632c005ee8c1c016f8970782a5734864836d7fcf6fe",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_letter.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/0d69918a7bae42369c834ea31067f3a5/e4_letter.mp4",
+      "bytes": 5083888,
+      "sha256": "208f28acdb3130a2d62cf6e94a36d76f59eb49dcea6ab47ec50d39461388f922",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_night0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/6876a49c0f674577baceb987b5950562/e4_night0.mp4",
+      "bytes": 1694610,
+      "sha256": "504f3c4570daff0814d45007a83e5643fbd70b5837040b561a49264b1881b182",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_peek.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/09811569d78a4bf281ca28e222aa2726/e4_peek.mp4",
+      "bytes": 8899302,
+      "sha256": "6dfcf05e1ac5f26dcf3f61a601eefe1c374ac363102b6b244a36af7f77532a79",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_scratch.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/3fac036e0aaa4e84a869baf1f0f33645/e4_scratch.mp4",
+      "bytes": 4409196,
+      "sha256": "6de541bfcace21d4e25039a0d854e42edad814dc8b876b5f7170da21474d6e2e",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_open0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/a0e79e9a268f4965a873e9bdee6f2494/e4_open0.mp4",
+      "bytes": 5053104,
+      "sha256": "9302b7590b47250c078c869c0b570d1548475873689a94be7f82c23c06d0a44d",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/idle/e4b_corridor2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/de48e5af275c4ebe923141276711691a/e4b_corridor2.mp4",
+      "bytes": 1158066,
+      "sha256": "841f36bcee12107a51bc37fb5f2cb41e4b95ad0a943f409e7737107b4a6ade38",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/idle/e4b_found2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/ca7a7958f59c4a56aaf844277dc05526/e4b_found2.mp4",
+      "bytes": 905487,
+      "sha256": "9512a30bf01086e5a9b999b16869d44ddded7f04a42bc371a081f5ab617a5fcc",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/idle/e4b_scratch2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/bde445ad1eb94887be215fd6a7c1e8f2/e4b_scratch2.mp4",
+      "bytes": 762203,
+      "sha256": "cbfdb142b2f85f83854896fb03f7ca11a7edf1650d7567339bef9d6feed33198",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_corridor1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/6f070ad352604c549faaf0bdd0d201a5/e4b_corridor1.mp4",
+      "bytes": 4251254,
+      "sha256": "623f1e313b89ad542df22d45c71e0cfb724fa98236497b610775b8b113488b8f",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_corridor2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/80bbb62fa83845cbb698108f61c5cdaa/e4b_corridor2.mp4",
+      "bytes": 2807364,
+      "sha256": "1097feb856716cb3666ac30a5009dc1842d68ebed9b17ec854ee0f0b6fd1ec93",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_found1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/b82a0d8271ef447c906b5d4f2fa7bfa2/e4b_found1.mp4",
+      "bytes": 5580692,
+      "sha256": "f0642331f964a326214a34a0a8429437b46be730217d2cb87693d19c46050ac5",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_found2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/69aedbd3d16e48b8affb7a4c4dbf7699/e4b_found2.mp4",
+      "bytes": 5392338,
+      "sha256": "bdbbadfd11f7467c83e70a8b3e3d29f2ab715c9b5afaf99b6ee00dfc18a75790",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_home1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/a765870b438d460bad53e7fc8e7179a2/e4b_home1.mp4",
+      "bytes": 8020045,
+      "sha256": "4456a60a787b6e3b9b2c5c47c1afabcbad910fb38d4d10e282c5a3529d59eeee",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_home2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/3fb2bc4b04a140989122f7c3c165c4ec/e4b_home2.mp4",
+      "bytes": 5999029,
+      "sha256": "0f779b34588985317780082752d8edbcf9e4a321480d7998f73b0611d90bc84b",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_in1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/e50363ad0c654339b140375f9ef5434d/e4b_in1.mp4",
+      "bytes": 4053048,
+      "sha256": "dc2f2f47e23ff6cfe5092a4369b42a08a2700ee77ebab0c1567da2605938df27",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_in2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/79707c6f33094df5847f687592960c7e/e4b_in2.mp4",
+      "bytes": 5488152,
+      "sha256": "7792c0d49337760fcd951d9a0b420a692b73978121464a49d6be24cee09ad1b3",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_letter.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/c0b76c2310cd4f75899f68768c59ee17/e4b_letter.mp4",
+      "bytes": 4417655,
+      "sha256": "fab54d0a6c2fe85f384ee4c96d46ba37d3b3f7ddd191c2945b08074a21a5476c",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_night0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/ff68c08782c94545971187fb4d43f95a/e4b_night0.mp4",
+      "bytes": 2380125,
+      "sha256": "388e0aaca69568a04766bfe9ba897c9f90ce9536269e964c8964251c2f51bc47",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_open0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/02bdc2a4745c48b28f40efc01a3e9c2d/e4b_open0.mp4",
+      "bytes": 8645871,
+      "sha256": "38a8f9624e6b232e2ab95bb8b81a764f906e4fdc21a07f4a702a7f560efafb8f",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_peek1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/80d88f2b4b6e42ef940f9b99c43731a7/e4b_peek1.mp4",
+      "bytes": 3685530,
+      "sha256": "2d3264495d3abc3d8102a44e9a565eeb6861cc366630b0fb67b39ac38183f561",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_peek2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/03c842aa7e4249879c9d76e27acc0052/e4b_peek2.mp4",
+      "bytes": 3283443,
+      "sha256": "02284a9cc8ef89cbc93660d9c008b88372ea52bf24a5607016401ec89160fdae",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_scratch1.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/1500286ce6c245f5a787921c1e4ec2cd/e4b_scratch1.mp4",
+      "bytes": 3551858,
+      "sha256": "36b88849cda03b12aa66b1212713f4bf59831303c99835cffd051aecff8c7cd4",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "skill-b/out/e4b_scratch2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/eb9584d2d73a433ea3f0a13430cb5ce9/e4b_scratch2.mp4",
+      "bytes": 2752334,
+      "sha256": "a1d95535f0d961815fb6efda9577bd3b8e77f5396309e2538fd2430e1e859c10",
+      "remoteMatches": true,
+      "range": "bytes"
+    },
+    {
+      "path": "ep4/out/e4_found0.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/47e3fdb58def4ee595e0a0860b3b017b/e4_found0.mp4",
+      "bytes": 1977085,
+      "sha256": "19a34920d09db67595f682ec0f4d60fb5c9c89935d167db2293f35fc2aa9fb0f",
+      "remoteMatches": true,
+      "range": "bytes"
+    }
+  ]
+}
