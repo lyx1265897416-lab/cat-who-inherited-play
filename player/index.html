@@ -163,7 +163,7 @@ function spare(){ return POOL.filter(e=>e!==front&&!WANT.has(e.dataset.u)).sort(
    ① 当前片没整段下完之前，后台预载全部暂停（preload=metadata），带宽全给当前片；
    ② 后台一次只下一段，而且整段下完再下一段（不再 4 秒就换）；
    ③ 开播前按实测下载速度判断能不能一路播完不卡，不够就先显示加载、攒够再播（最多等 15 秒）。 */
-let QUEUE=[], warming=null, PEND=null;  // PEND：正要切过去、还在攒缓冲的那一段，优先级和当前片一样
+let QUEUE=[], warming=null, PEND=null; let IDLEU=null, IDLES=null;  // 当前节点有选项/交互时它的待机循环地址  // PEND：正要切过去、还在攒缓冲的那一段，优先级和当前片一样
 function bufEnd(e){ try{ const b=e.buffered; if(!b.length) return 0; const t=e.currentTime||0; for(let i=0;i<b.length;i++) if(b.start(i)<=t+0.3&&b.end(i)>=t) return b.end(i); return b.end(b.length-1); }catch(_){ return 0; } }
 function full(e){ return !!(e.duration && bufEnd(e)>=e.duration-0.3); }
 function warmDone(e){ return e.readyState>=3 && full(e); }
@@ -177,7 +177,11 @@ function rateOf(e){ const h=e._h||[]; if(h.length<2) return 0; const a=h[0], z=h
 setInterval(()=>POOL.forEach(sample),250);  // 每个播放器的下载速度（每秒下进几秒画面），切段时直接用，不用现量
 setInterval(()=>{  // 预载调度：每 0.4 秒看一次
   if(warming&&(warming===front||warming===PEND)) warming=null;  // 正在预载的那段已经被切成当前片
-  if(!frontReady()){ hush(null); if(warming) warming.preload='metadata'; return; }
+  if(!frontReady()){
+    const ahead=bufEnd(front)-(front.currentTime||0);
+    if(warming&&warming.dataset.u===IDLEU&&!full(warming)){ warming.preload='auto'; hush(warming); return; }  // 选项待机循环很小，和当前片一起下
+    if(IDLEU&&!elFor(IDLEU)&&ahead>=4){ QUEUE=QUEUE.filter(x=>absu(x)!==IDLEU); warm(IDLES); hush(warming); return; }
+    hush(null); if(warming) warming.preload='metadata'; return; }
   if(warming && warming.dataset.warm){ const el=(Date.now()-(+warming.dataset.t))/1000;
     if(warmDone(warming)||el>45){ warming.pause(); warming=null; } else { if(warming.preload!=='auto') warming.preload='auto'; hush(warming); return; } }
   warming=null; if(!QUEUE.length) return;
@@ -186,17 +190,21 @@ setInterval(()=>{  // 预载调度：每 0.4 秒看一次
   warm(nx); hush(warming);
 },400);
 /* 开播前判断：按最近 1.5 秒的下载速度（每秒下进几秒画面）估算，能一路播到尾不卡才播 */
-function safeStart(b){ return new Promise(res=>{ const t0=performance.now();
-  const ck=()=>{ const d=b.duration||0, be=bufEnd(b), t=b.currentTime||0, ahead=be-t, rem=d-t;
+function safeStart(b){ return new Promise(res=>{ const t0=performance.now(); let lastBe=-1, lastMove=t0;
+  const ck=()=>{ const now=performance.now(), d=b.duration||0, be=bufEnd(b), t=b.currentTime||0, ahead=be-t, rem=d-t;
+    if(be>lastBe+0.05){ lastBe=be; lastMove=now; }
     const r=0.8*rateOf(b);  // 打八折：网速有波动，宁可多等半秒也别片中卡
-    const ok=(full(b)&&b.readyState>=1) || b.readyState>=3 && ( ahead>=Math.min(rem,8) || (d && (r>=1.1 ? ahead>=Math.min(rem,2) : r>0.05 && ahead>=(1-r)*rem+2)));
-    if(ok||performance.now()-t0>15000) return res(); setTimeout(ck,150); };
+    const ok=(full(b)&&b.readyState>=1) || b.readyState>=3 && (ahead>=Math.min(rem,8) || (d && (r>=1.1 ? ahead>=Math.min(rem,2) : r>0.05 && ahead>=(1-r)*rem+2)));
+    /* 有的浏览器（手机 Safari）暂停时不往下载：缓冲 1.2 秒没动静就直接开播，让播放带着下载走，不能干等 */
+    const idle=now-lastMove>1200 && now-t0>1200;
+    if(ok||idle||now-t0>8000) return res(); setTimeout(ck,150); };
   ck(); }); }
 function target(id){ const n=S.nodes[id]; return n&&n.media&&Object.keys(n.media).length?media(n):null; }
 function plan(id){ const n=S.nodes[id]; if(!n||cur!==id) return; const L=[];
   if(n.qte||n.choice){ L.push(idleOf(n)); if(n.choice) n.choice.options.forEach(x=>L.push(target(x.goto))); if(n.qte){ L.push(target(n.qte.goto)); if(n.qte.timeout&&n.qte.timeout!==n.qte.goto) L.push(target(n.qte.timeout)); } }
   else if(n.next){ L.push(target(n.next)); const nn=S.nodes[n.next];  // 往后多看一步：下下段（或下一段的待机循环）也排上
     if(nn&&(nn.qte||nn.choice)) L.push(idleOf(nn)); else if(nn&&nn.next) L.push(target(nn.next)); }
+  IDLES=(n.qte||n.choice)?idleOf(n):null; IDLEU=IDLES?absu(IDLES):null;
   const want=L.filter(Boolean).slice(0,5); WANT=new Set(want.map(absu));
   POOL.forEach(e=>{ if(e!==front&&e.dataset.warm&&!WANT.has(e.dataset.u)){ e.pause(); e.preload='metadata'; } });  // 不再需要的预载停掉
   QUEUE=want.filter(u=>{ const e=elFor(absu(u)); return !(e&&warmDone(e)); }); }
@@ -205,7 +213,7 @@ function swap(src, loop){ const u=absu(src), my=++SWAPID; let b=elFor(u); if(!b|
   delete b.dataset.warm; b.dataset.t=Date.now(); b.pause(); try{ b.currentTime=0; }catch(e){} b.playbackRate=1; b.loop=!!loop; b.muted=false; b.dataset.node=loop?'':cur;
   b.preload='auto'; PEND=b; if(warming===b) warming=null; hush(b);
   $('#loading').style.display='none'; const lt=setTimeout(()=>{ if(PEND===b) $('#loading').style.display='block'; },350);  // 只有真要等才转圈
-  return safeStart(b).then(()=>{ if(my!==SWAPID) throw new Error('stale'); return b.play(); }).finally(()=>{ clearTimeout(lt); if(PEND===b) PEND=null; }).then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
+  return (loop?Promise.resolve():safeStart(b)).then(()=>{ if(my!==SWAPID) throw new Error('stale'); return b.play(); }).finally(()=>{ clearTimeout(lt); if(PEND===b) PEND=null; }).then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
     if(!loop&&window.RT) RT.begin({key:'node:'+cur, parts:[{v:b, d:b.duration}], free:true}); }); }
 function cap(){ const n=S.nodes[cur], box=$('#cap'); if(!n||mode!=='play'||!cc||uiUp||front.dataset.node!==cur){ box.innerHTML=''; return; }
   const tt=front.currentTime, c=(n.captions||[]).find(c=>tt>=c.s-.05&&tt<=c.e+.2); if(!c){ box.innerHTML=''; return; }
