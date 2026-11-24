@@ -155,35 +155,57 @@ const POOL=[va,vb];
 for(let i=0;i<5;i++){ const e=document.createElement('video'); e.setAttribute('playsinline',''); e.playsInline=true; e.preload='auto'; vb.after(e); POOL.push(e); }
 let WANT=new Set();
 // Always use the approved original files. Network quality only affects buffering, never picture quality.
-const absu=s=>/^https?:/.test(s)?s:new URL('../'+s, location.href).href;
+const CB=Q.get('cb');  // 测试用：&cb=任意值 给视频地址加参数绕开浏览器缓存
+const absu=s=>{ const u=/^https?:/.test(s)?s:new URL('../'+s, location.href).href; return CB?u+(u.includes('?')?'&':'?')+'cb='+CB:u; };
 const elFor=u=>POOL.find(e=>e.dataset.u===u);
 function spare(){ return POOL.filter(e=>e!==front&&!WANT.has(e.dataset.u)).sort((a,b)=>(+a.dataset.t||0)-(+b.dataset.t||0))[0]||POOL.find(e=>e!==front); }
-/* 预载 v2（防卡）：一次只缓冲一个；每个缓冲到约 4 秒就暂停（停止解码），再缓冲下一个；
-   当前正在看的片段没缓冲完之前不开始后台预载，不和它抢带宽。顺序：待机循环 → 下一段 / 各选项去向。 */
-const WARM_SEC=4; let QUEUE=[], warming=null;
-function bufEnd(e){ try{ const b=e.buffered; return b.length? b.end(b.length-1):0; }catch(_){ return 0; } }
-function warmDone(e){ return e.readyState>=3 && bufEnd(e)>=Math.min(WARM_SEC,(e.duration||WARM_SEC)-0.2); }
+/* 预载 v3（防卡，原片不降画质，2026-11-23）：视频 CDN 从国内只有约 7–11 Mbps，长片原片 4–6 Mbps，只缓冲前 4 秒会在片中卡住。
+   ① 当前片没整段下完之前，后台预载全部暂停（preload=metadata），带宽全给当前片；
+   ② 后台一次只下一段，而且整段下完再下一段（不再 4 秒就换）；
+   ③ 开播前按实测下载速度判断能不能一路播完不卡，不够就先显示加载、攒够再播（最多等 15 秒）。 */
+let QUEUE=[], warming=null, PEND=null;  // PEND：正要切过去、还在攒缓冲的那一段，优先级和当前片一样
+function bufEnd(e){ try{ const b=e.buffered; if(!b.length) return 0; const t=e.currentTime||0; for(let i=0;i<b.length;i++) if(b.start(i)<=t+0.3&&b.end(i)>=t) return b.end(i); return b.end(b.length-1); }catch(_){ return 0; } }
+function full(e){ return !!(e.duration && bufEnd(e)>=e.duration-0.3); }
+function warmDone(e){ return e.readyState>=3 && full(e); }
 function warm(src){ if(!src) return; const u=absu(src); if(elFor(u)) return; const e=spare(); if(!e) return;
-  e.dataset.u=u; e.dataset.t=Date.now(); delete e.dataset.t0; e.addEventListener('loadeddata',()=>{ if(e.dataset.u===u&&e.dataset.warm&&e!==front){ e.pause(); try{ e.currentTime=0; }catch(_){} } },{once:true}); /* 拿到首帧就停：不解码、不走位，浏览器按 preload=auto 继续缓冲 */ e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
-function frontReady(){ if(!front.src) return true; if(front.loop) return front.readyState>=3;  // 待机循环能顺播就开始预载下一段
-  return !!(front.duration && bufEnd(front)>=Math.min(front.duration-0.3, front.currentTime+6)); }  // 当前片已多缓冲 6 秒（或下完）才开始后台预载
+  e.dataset.u=u; e.dataset.t=Date.now(); e.addEventListener('loadeddata',()=>{ if(e.dataset.u===u&&e.dataset.warm&&e!==front){ e.pause(); try{ e.currentTime=0; }catch(_){} } },{once:true}); /* 拿到首帧就停：不解码、不走位，浏览器按 preload=auto 继续缓冲到整段 */ e.dataset.warm='1'; e.muted=true; e.loop=false; e.preload='auto'; e.src=u; e.playbackRate=0.07; warming=e; const p=e.play(); if(p) p.catch(()=>{}); }
+function frontReady(){ if(PEND&&!full(PEND)) return false; if(!front.src) return true; return full(front); }  // 当前片（含待机循环）整段下完才开始后台预载
+function hush(keep){ [front,PEND].forEach(e=>{ if(e&&e.preload!=='auto') e.preload='auto'; }); POOL.forEach(e=>{ if(e!==front&&e!==PEND&&e!==keep&&e.dataset.u&&!full(e)&&e.preload!=='metadata') e.preload='metadata'; }); }  // 暂停其它后台下载
+function sample(e){ if(!e.dataset.u) return; const now=performance.now(), be=bufEnd(e), h=e._h||(e._h=[]);
+  if(h.length&&h[h.length-1][2]!==e.dataset.u) h.length=0; h.push([now,be,e.dataset.u]); while(h.length>1&&now-h[0][0]>3000) h.shift(); }
+function rateOf(e){ const h=e._h||[]; if(h.length<2) return 0; const a=h[0], z=h[h.length-1]; return z[0]-a[0]>700 ? Math.max(0,(z[1]-a[1])/((z[0]-a[0])/1000)) : 0; }
+setInterval(()=>POOL.forEach(sample),250);  // 每个播放器的下载速度（每秒下进几秒画面），切段时直接用，不用现量
 setInterval(()=>{  // 预载调度：每 0.4 秒看一次
+  if(warming&&(warming===front||warming===PEND)) warming=null;  // 正在预载的那段已经被切成当前片
+  if(!frontReady()){ hush(null); if(warming) warming.preload='metadata'; return; }
   if(warming && warming.dataset.warm){ const el=(Date.now()-(+warming.dataset.t))/1000;
-    if(warmDone(warming)||el>15){ warming.pause(); warming=null; } else return; }
-  warming=null; if(!QUEUE.length||!frontReady()) return;
-  warm(QUEUE.shift());
+    if(warmDone(warming)||el>45){ warming.pause(); warming=null; } else { if(warming.preload!=='auto') warming.preload='auto'; hush(warming); return; } }
+  warming=null; if(!QUEUE.length) return;
+  const nx=QUEUE.shift(), e0=elFor(absu(nx));
+  if(e0){ if(!full(e0)){ e0.preload='auto'; e0.dataset.warm='1'; e0.dataset.t=Date.now(); warming=e0; hush(e0); } return; }  // 之前下了一半的接着下
+  warm(nx); hush(warming);
 },400);
+/* 开播前判断：按最近 1.5 秒的下载速度（每秒下进几秒画面）估算，能一路播到尾不卡才播 */
+function safeStart(b){ return new Promise(res=>{ const t0=performance.now();
+  const ck=()=>{ const d=b.duration||0, be=bufEnd(b), t=b.currentTime||0, ahead=be-t, rem=d-t;
+    const r=0.8*rateOf(b);  // 打八折：网速有波动，宁可多等半秒也别片中卡
+    const ok=(full(b)&&b.readyState>=1) || b.readyState>=3 && ( ahead>=Math.min(rem,8) || (d && (r>=1.1 ? ahead>=Math.min(rem,2) : r>0.05 && ahead>=(1-r)*rem+2)));
+    if(ok||performance.now()-t0>15000) return res(); setTimeout(ck,150); };
+  ck(); }); }
 function target(id){ const n=S.nodes[id]; return n&&n.media&&Object.keys(n.media).length?media(n):null; }
 function plan(id){ const n=S.nodes[id]; if(!n||cur!==id) return; const L=[];
   if(n.qte||n.choice){ L.push(idleOf(n)); if(n.choice) n.choice.options.forEach(x=>L.push(target(x.goto))); if(n.qte){ L.push(target(n.qte.goto)); if(n.qte.timeout&&n.qte.timeout!==n.qte.goto) L.push(target(n.qte.timeout)); } }
-  else if(n.next) L.push(target(n.next));
+  else if(n.next){ L.push(target(n.next)); const nn=S.nodes[n.next];  // 往后多看一步：下下段（或下一段的待机循环）也排上
+    if(nn&&(nn.qte||nn.choice)) L.push(idleOf(nn)); else if(nn&&nn.next) L.push(target(nn.next)); }
   const want=L.filter(Boolean).slice(0,5); WANT=new Set(want.map(absu));
-  POOL.forEach(e=>{ if(e!==front&&e.dataset.warm&&!WANT.has(e.dataset.u)) e.pause(); });  // 不再需要的预载停掉
+  POOL.forEach(e=>{ if(e!==front&&e.dataset.warm&&!WANT.has(e.dataset.u)){ e.pause(); e.preload='metadata'; } });  // 不再需要的预载停掉
   QUEUE=want.filter(u=>{ const e=elFor(absu(u)); return !(e&&warmDone(e)); }); }
-function swap(src, loop){ const u=absu(src); let b=elFor(u); if(!b||b===front){ b=spare(); b.dataset.u=u; b.src=u; }
+let SWAPID=0;
+function swap(src, loop){ const u=absu(src), my=++SWAPID; let b=elFor(u); if(!b||b===front){ b=spare(); b.dataset.u=u; b.src=u; }
   delete b.dataset.warm; b.dataset.t=Date.now(); b.pause(); try{ b.currentTime=0; }catch(e){} b.playbackRate=1; b.loop=!!loop; b.muted=false; b.dataset.node=loop?'':cur;
-  if(b.readyState<3) $('#loading').style.display='block';
-  return b.play().then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
+  b.preload='auto'; PEND=b; if(warming===b) warming=null; hush(b);
+  $('#loading').style.display='none'; const lt=setTimeout(()=>{ if(PEND===b) $('#loading').style.display='block'; },350);  // 只有真要等才转圈
+  return safeStart(b).then(()=>{ if(my!==SWAPID) throw new Error('stale'); return b.play(); }).finally(()=>{ clearTimeout(lt); if(PEND===b) PEND=null; }).then(()=>{ $('#loading').style.display='none'; b.classList.add('on'); const old=front; front=b; if(old!==b){ old.classList.remove('on'); old.pause(); old.muted=true; }
     if(!loop&&window.RT) RT.begin({key:'node:'+cur, parts:[{v:b, d:b.duration}], free:true}); }); }
 function cap(){ const n=S.nodes[cur], box=$('#cap'); if(!n||mode!=='play'||!cc||uiUp||front.dataset.node!==cur){ box.innerHTML=''; return; }
   const tt=front.currentTime, c=(n.captions||[]).find(c=>tt>=c.s-.05&&tt<=c.e+.2); if(!c){ box.innerHTML=''; return; }
@@ -276,7 +298,10 @@ function renderMenu(){ const Z=LANG==='zh', curEp=cur&&S.nodes[cur]?S.nodes[cur]
 $('#bmenu').onclick=e=>{e.stopPropagation(); if(mode==='play') front.pause(); renderMenu(); $('#menu').classList.add('on');};
 $('#menuback').onclick=e=>{e.stopPropagation(); $('#menu').classList.remove('on'); if(mode==='play') front.play();};
 POOL.forEach(v=>{
-  v.addEventListener('waiting',()=>{ if(v===front && mode==='play') $('#loading').style.display='block'; });
+  v.addEventListener('waiting',()=>{ if(v!==front || mode!=='play') return; $('#loading').style.display='block';
+    if(v.loop||v.dataset.rebuf) return; v.dataset.rebuf='1'; hush(null);  // 片中卡住：先停下攒够再一口气播完，不一卡一卡
+    setTimeout(()=>{ if(v!==front||v.paused||v.readyState>=3){ delete v.dataset.rebuf; return; } v.pause();
+      safeStart(v).then(()=>{ delete v.dataset.rebuf; if(v===front&&mode==='play'&&!uiUp) v.play().catch(()=>{}); }); },300); });
   v.addEventListener('playing',()=>{ if(v===front) $('#loading').style.display='none'; });
 });
 POOL.forEach(v=>v.addEventListener('ended',()=>{ if(v===front&&mode==='play') after(); }));
