@@ -153,9 +153,9 @@
     },
     {
       "path": "ep3/idle/e3_celeste.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_95e0e7d364cc45ecbf618ed5f3b80244-e3_celeste.mp4",
-      "bytes": 1182310,
-      "sha256": "4867ede751cba1f37d00aebb59bb8575525e415e102ac120c56ce44616c45bdb"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/f8600f0c33ae42fa954bce124273ee35/e3_celeste.mp4",
+      "bytes": 1671870,
+      "sha256": "a49f54c9152f2109f698f281709916ac9d45c47ae368e5e46baf1e30beb898bf"
     },
     {
       "path": "ep3/idle/e3_door.mp4",
@@ -165,33 +165,33 @@
     },
     {
       "path": "ep3/idle/e3_shop.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/2651cc7f60bb49b7b1592be7e4820ab8/e3_shop.mp4",
-      "bytes": 597427,
-      "sha256": "b7473a9c13d0f6cc34b253f1b56d353125cc239d6f1a270c30c625bce3cad1f8"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/b1825075f01e422aa86199a30d770231/e3_shop.mp4",
+      "bytes": 766528,
+      "sha256": "522edb2e4abc6a732eae42cfc0748348cb9d4eaa58d6548515bbea340e0ab682"
     },
     {
       "path": "ep3/out/e3_A.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_d0ab3e6bd7f04a01bca0c28f0e8c9be3-e3_A.mp4",
-      "bytes": 4038943,
-      "sha256": "797fa2c78d4b78a35fa9736d2932e2efddbc28f4cce65d59a72bb12698b0259d"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/0b84cb627c7742ffb0f3b80156196c98/e3_A.mp4",
+      "bytes": 3785542,
+      "sha256": "deef24663a24698216957ad85cc32d7f29f0719785893eb2fb6f3925c40b67b9"
     },
     {
       "path": "ep3/out/e3_A2.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_745515eea135480eafb408f4e7fc3a8d-e3_A2.mp4",
-      "bytes": 2530123,
-      "sha256": "711480d3191fdefe1491eaf029120c524f3a8d6440cb10dd8c8e0876ef573ca0"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/d3240a358ca942378bb8e5f42f4d6c85/e3_A2.mp4",
+      "bytes": 2709204,
+      "sha256": "47f4d00402ba064ea187f7638f9c1bf556350a793d38fa31a0075e8cac2e5995"
     },
     {
       "path": "ep3/out/e3_B.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_74e8439026d342db9e0a6e82516fce14-e3_B.mp4",
-      "bytes": 3991665,
-      "sha256": "b9ea9022f8bbeb05c205060bd1efba9dad57b780f6c0eceface5732032a682b2"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/00bfab6f5f9f4500879884b60252b6e5/e3_B.mp4",
+      "bytes": 3746985,
+      "sha256": "56e27dd89ef9f1af32aa99e9fcda9549bbfea7d102fcb6150371400b33d25f46"
     },
     {
       "path": "ep3/out/e3_arrive.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_98d4f2c1a91848259c0597caaffc9961-e3_arrive.mp4",
-      "bytes": 3942381,
-      "sha256": "0f097430d833452affa2cfc7e55dafbeaa67465bbd2ae70959bcf37849386c25"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/810812c4bb084f539ad3a84602b55000/e3_arrive.mp4",
+      "bytes": 3578166,
+      "sha256": "52d2a00d8bf3683a174b49d7f6e5b2bdae518c72facab3c05f2e91917b960e27"
     },
     {
       "path": "ep3/out/e3_bk0.mp4",
@@ -213,9 +213,9 @@
     },
     {
       "path": "ep3/out/e3_celeste.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_ab4a386d5fe948ccad9c59f94ddfaf1b-e3_celeste.mp4",
-      "bytes": 10907236,
-      "sha256": "89702b3e1fb64b454f88a137798e96ea6d41fee6cf988d8f4bcc16ec1539ac24"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/00284925418f446d8d9cbec85dfcb993/e3_celeste.mp4",
+      "bytes": 12092327,
+      "sha256": "f3e6008068087449db0a2ce2c5ec494e1acab5f3f089914510a0a0e0b7291027"
     },
     {
       "path": "ep3/out/e3_door.mp4",
@@ -225,9 +225,9 @@
     },
     {
       "path": "ep3/out/e3_enter.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_5b78c83852ac4f91be790f3ec1092023-e3_enter.mp4",
-      "bytes": 3510124,
-      "sha256": "6d07f57e3cb1bcf9a163c706e9ed10a8eaf2f2589a5b51a983c320ae28a949ba"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/adb15807922b479b9867cefaf7721544/e3_enter.mp4",
+      "bytes": 3841027,
+      "sha256": "d05243d99e219eb127038b1f7b31d170efe559af011e4ea502b8bb7e2a92042d"
     },
     {
       "path": "ep3/out/e3_graves.mp4",
@@ -243,15 +243,15 @@
     },
     {
       "path": "ep3/out/e3_paid.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_3542bd7fe4e841f191bf7c6da95ca72e-e3_paid.mp4",
-      "bytes": 2079884,
-      "sha256": "f3abb47a7840d67f54359a7e37b5daae5b1f8fc950873e5dd252c00a397a018f"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/759eb21b93144c8eabbd1a4b8c982c44/e3_paid.mp4",
+      "bytes": 2332417,
+      "sha256": "f19a461d2216ee1fe067c28e3aabe47495eda2ce3a9208d4eb70529e9ec5e68d"
     },
     {
       "path": "ep3/out/e3_shop.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_1ff46039a1de44be8ef550fb117150d7-e3_shop.mp4",
-      "bytes": 3027079,
-      "sha256": "5ff668d32fd2a91943a3dad132f6c0995d4c1180f240056c6c562b26686e1ab0"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/0c71e3136efa47969138b5db269fc7e1/e3_shop.mp4",
+      "bytes": 3458661,
+      "sha256": "f68a02c118cfa030924f6c3fdd555c528c2cffe4fcfa69b9a32a782e829005ca"
     },
     {
       "path": "ep4/idle/e4_corridor.mp4",
