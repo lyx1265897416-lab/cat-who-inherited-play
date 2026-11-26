@@ -165,9 +165,9 @@
     },
     {
       "path": "ep3/idle/e3_shop.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/b1825075f01e422aa86199a30d770231/e3_shop.mp4",
-      "bytes": 766528,
-      "sha256": "522edb2e4abc6a732eae42cfc0748348cb9d4eaa58d6548515bbea340e0ab682"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/0ec2fe54303d49c182fa2a5cbc112f90/e3_shop.mp4",
+      "bytes": 965281,
+      "sha256": "3c7a2fc936cb51597e3848fb226b43fd129335a1512a2fcc69265b17bab96dfc"
     },
     {
       "path": "ep3/out/e3_A.mp4",
@@ -204,6 +204,18 @@
       "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/local/uau_64871f77430f410898bf14cbf8d6f076-e3_breakfast.mp4",
       "bytes": 3795787,
       "sha256": "c453260f275dcbf11e572ea1326bb06ed9df773db4964577b851d1b5ce067871"
+    },
+    {
+      "path": "ep3/out/e3_browse.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/b984b1106c084832869bfc62cb569171/e3_browse.mp4",
+      "bytes": 8493182,
+      "sha256": "73d408843ccee0a85bc602024c9719de89e8d469d86f50b23dfc0c3c0d6f7f60"
+    },
+    {
+      "path": "ep3/out/e3_browse2.mp4",
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/42720830bd5d499d8f62ee9461dcfd6c/e3_browse2.mp4",
+      "bytes": 6891530,
+      "sha256": "a561d2447b5ffbde47c130805bef4de9fab937af259e91a97a630792ce5717b4"
     },
     {
       "path": "ep3/out/e3_car.mp4",
@@ -249,9 +261,9 @@
     },
     {
       "path": "ep3/out/e3_shop.mp4",
-      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/0c71e3136efa47969138b5db269fc7e1/e3_shop.mp4",
-      "bytes": 3458661,
-      "sha256": "f68a02c118cfa030924f6c3fdd555c528c2cffe4fcfa69b9a32a782e829005ca"
+      "url": "https://storage.googleapis.com/waku-core-aicap/uploads/usr_4a6e5fb234d64da0a9429e519b299f07/6a43efdbca0745539d6abfeeab2f6fed/e3_shop.mp4",
+      "bytes": 4052688,
+      "sha256": "4f857819921a114274e9d483253c674bac42a69fa4ab2149fcbabaf43493a447"
     },
     {
       "path": "ep4/idle/e4_corridor.mp4",
